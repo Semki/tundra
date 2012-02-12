@@ -18,6 +18,7 @@ public class Schema extends Controller {
 		System.out.println("Test");
 		SchemaManager mr = new SchemaManager();
 		try {
+			
 			mr.InitSchema(body);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

@@ -6,6 +6,7 @@ import java.io.PrintWriter;
 
 public class Utils {
 	
+	
 	public static String TableNameToGlobalsName(String tableName)
     {
         return tableName + "D";

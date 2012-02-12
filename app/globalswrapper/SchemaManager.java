@@ -12,6 +12,7 @@ public class SchemaManager {
 	public static String COLUMNS_NAME = "columns";
 	public void InitSchema(JsonObject schemaObject) throws Exception
 	{
+		
 		//JSONObject tables = (JSONObject) schemaObject.get(TABLES_NAME);
 		if (schemaObject != null)
 		{
@@ -21,7 +22,7 @@ public class SchemaManager {
 		{
 			Utils.writeToFile("", "schema is null");
 		}
-		
+		/*
 		Iterator iter = schemaObject.entrySet().iterator();
 	    
 		while (iter.hasNext()) {
@@ -38,7 +39,7 @@ public class SchemaManager {
 		    
 		    node.set(iter.toString(), id, "key");
 			
-	    }
+	    }*/
 	    
 	}
 }

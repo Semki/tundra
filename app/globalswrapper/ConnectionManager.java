@@ -18,6 +18,7 @@ public class ConnectionManager {
         return ConnectionManager.manager;
     }
     
+    
     private com.intersys.globals.Connection _connection;
 
     public com.intersys.globals.Connection getConnection() 
@@ -26,22 +27,19 @@ public class ConnectionManager {
         {
             try
             {
-            	
                  _connection =  (com.intersys.globals.Connection) ConnectionContext.getConnection(); // ConnectionContext.getConnection();
-                
                 if (!_connection.isConnected())
                 {
                     _connection.connect("USER","_SYSTEM","DATA");
-                    //_connection.connect("","","");
                 }
             }
             catch (GlobalsException ex)
             {
-                throw ex;
+                //ex.printStackTrace();
             }
             catch (Exception ex2)
             {
-                throw ex2;
+                //ex2.Trace();
             }
         }
         return _connection;
