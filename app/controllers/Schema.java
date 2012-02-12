@@ -24,7 +24,6 @@ public class Schema extends Controller {
 			e.printStackTrace();
 			Utils.writeToFile("", e.toString());
 			
-		}
 	}
 
 	public static void read(){
