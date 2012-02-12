@@ -28,8 +28,30 @@ $(document).ready(function() {
 	
 	$('#test_btn').click(function(){
 	
-		var schemaObject = {user_id: 'alexey' };
+		var schemaObject = {user_id: 'alexey',
+							project_id: 100,
+							tables: [
+								{
+									table_name: 'Person',
+									columns: [
+										{column_name: 'name', type: 'string'},
+										{column_name: 'age', type: 'integer'},
+										{column_name: 'sex', type: 'boolean'}
+									]
+								},
+								{
+									table_name: 'Address',
+									columns: [
+										{column_name: 'city', type: 'string'},
+										{column_name: 'street', type: 'string'},
+										{column_name: 'building', type: 'string'},
+										{column_name: 'person_id', type: 'integer'}
+									]
+								}
+							]};
+							
 		
+				
 		$.post("/schema/create", JSON.stringify(schemaObject), function(data) {
 	        
 	    }, "json");
