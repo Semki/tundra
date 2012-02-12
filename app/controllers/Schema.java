@@ -24,10 +24,10 @@ public class Schema extends Controller {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Utils.writeToFile("", e.toString());
-			
 		}
-		
-		renderJSON("[]");
 	}
 
+	public static void read(){
+		
+	}
 }
