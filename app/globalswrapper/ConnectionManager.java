@@ -18,15 +18,16 @@ public class ConnectionManager {
         return ConnectionManager.manager;
     }
     
-    private Connection _connection;
+    private com.intersys.globals.Connection _connection;
 
-    public Connection getConnection() throws Exception 
+    public com.intersys.globals.Connection getConnection() 
     {
         if (_connection == null)
         {
             try
             {
-                 _connection =  ConnectionContext.getConnection(); // ConnectionContext.getConnection();
+            	
+                 _connection =  (com.intersys.globals.Connection) ConnectionContext.getConnection(); // ConnectionContext.getConnection();
                 
                 if (!_connection.isConnected())
                 {

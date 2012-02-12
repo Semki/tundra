@@ -1,5 +1,8 @@
 package controllers;
 
+import globalswrapper.SchemaManager;
+import globalswrapper.Utils;
+
 import com.google.gson.JsonObject;
 
 import play.mvc.Controller;
@@ -12,15 +15,19 @@ public class Schema extends Controller {
 	}
 	
 	public static void create(JsonObject body) {
-		if (body == null){
-			System.out.println("trololo");
+		System.out.println("Test");
+		SchemaManager mr = new SchemaManager();
+		try {
+			mr.InitSchema(body);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Utils.writeToFile("", e.toString());
+			
 		}
-		renderJSON(body);
-	}
-	
-	public static void read(){
-		System.out.println();
-		renderJSON("[]");
 	}
 
+	public static void read(){
+		
+	}
 }
