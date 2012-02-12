@@ -13,6 +13,14 @@ public class SchemaManager {
 	public void InitSchema(JsonObject schemaObject) throws Exception
 	{
 		//JSONObject tables = (JSONObject) schemaObject.get(TABLES_NAME);
+		if (schemaObject != null)
+		{
+			Utils.writeToFile("", schemaObject.toString());
+		}
+		else
+		{
+			Utils.writeToFile("", "schema is null");
+		}
 		
 		Iterator iter = schemaObject.entrySet().iterator();
 	    
