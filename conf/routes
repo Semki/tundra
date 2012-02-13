@@ -5,20 +5,16 @@
 # Home page
 GET     /                                       Application.index
 
+GET     /test                                    Application.test
+
 # Ignore favicon requests
 GET     /favicon.ico                            404
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
 
-GET /objects/{id}		CRUD.show
-
-GET /project Project.index
-GET /project/create Project.create
-POST /project/new_project Project.new_project
-
-
+GET /objects/{projectId}/{tableName}/{id}		CRUD.show
 
 # Catch all
-*       /{controller}/{action}                  {controller}.{action}
+*       /{controller}/{action}               {controller}.{action}
 

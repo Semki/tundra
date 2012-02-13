@@ -36,6 +36,7 @@ public class SchemaManager {
 		
 	}
 	
+	
 	/// Создает схему данных
 	public void InitSchema(JsonObject schemaObject, Long projectId) throws Exception
 	{
@@ -70,16 +71,7 @@ public class SchemaManager {
 		return "P"+projectId.toString();
 	}
 	
-	public Long GetNextProjectId()
-	{
-		
-		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(GetProjectsStorageGlobalsName());
-		node.setSubscriptCount(0);
-		node.increment(1);
-		Long nextId = node.getLong();
-		node.close();
-		return nextId;
-	}
+	
 	/*
 	// Создаем информацию о схеме данных через типовую структуру глобалов
 	public void CreateTableOld(JsonObject table)
