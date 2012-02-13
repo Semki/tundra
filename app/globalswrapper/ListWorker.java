@@ -30,7 +30,8 @@ public class ListWorker {
 			if (strKey.equals(""))
 				break;
 			key = Long.parseLong(strKey);
-			JsonObject obj = new JsonParser().parse(node.getObject(key).toString()).getAsJsonObject();
+			String nodeValue = node.getObject(key, "JSON").toString();
+			JsonObject obj = new JsonParser().parse(nodeValue).getAsJsonObject();
 			list.add(obj);
 		}
 		
@@ -45,9 +46,16 @@ public class ListWorker {
 	
 	public ArrayList<JsonObject> PaginateItems(ArrayList<JsonObject> items, PageInfo requiredPage)
 	{
+		int hiIndex = requiredPage.GetHiIndex();
+		if (hiIndex == 0)
+			return items;
 		
-		return items;
+		int lowIndex = requiredPage.GetLowIndex();
 		
+		hiIndex = Math.min(hiIndex, items.size());
+		lowIndex = Math.min(lowIndex, items.size());
+		return new ArrayList<JsonObject>(items.subList(lowIndex, hiIndex));
+	
 	}
 	
 	public void WriteList(ArrayList<JsonObject> items)
