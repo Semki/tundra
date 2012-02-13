@@ -17,15 +17,16 @@ public class CRUDManager {
         return manager;
     }
     
-    public static CRUDManager Init()
+    private static CRUDManager Init()
     {
         CRUDManager _manager = new CRUDManager();
         _manager.connectionManager = ConnectionManager.Instance();
         return _manager;
     }
     
-    public void Create(String tableName, JsonObject object) throws Exception
+    public JsonObject Create(String tableName, JsonObject object) throws Exception
     {
+    	JsonObject response = new JsonObject();
         String globalName = Utils.TableNameToGlobalsName(tableName);
         
         //NodeReference node = connectionManager.getConnection().createNodeReference(globalsName);
@@ -41,7 +42,30 @@ public class CRUDManager {
     
        
         node.set("TESTTT", id, "Field1");
+        
+        return response;
     }
+    
+    public JsonObject Read(String tableName, long id) throws Exception
+    {
+    	JsonObject response = new JsonObject();
+    	return response;
+    }
+    
+    
+    public JsonObject Update(String tableName, JsonObject object) throws Exception
+    {
+    	JsonObject response = new JsonObject();
+    	return response;
+    }
+    
+    
+    public Boolean Delete(String tableName, long id) throws Exception
+    {
+    	return true;
+    }
+    
+    
     
 
 }
