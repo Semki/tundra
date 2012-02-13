@@ -13,11 +13,11 @@ public class Schema extends BaseController {
 		render();
 	}
 	
-	public static void create(JsonObject body) {
+	public static void create(JsonObject body, Long projectId) {
 		System.out.println(body.toString());
 		SchemaManager mr = new SchemaManager();
 		try {			
-			mr.InitSchema(body);
+			mr.InitSchema(body, projectId);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.toString());
