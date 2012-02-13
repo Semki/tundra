@@ -35,10 +35,12 @@ public class ConnectionManager {
             }
             catch (GlobalsException ex)
             {
+            	System.out.println(ex.toString());
                 //ex.printStackTrace();
             }
             catch (Exception ex2)
             {
+            	System.out.println(ex2.toString());
                 //ex2.Trace();
             }
         }
