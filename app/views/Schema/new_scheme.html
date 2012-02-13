@@ -1,0 +1,15 @@
+#{extends 'main.html' /}
+
+#{set 'moreScripts'}
+    #{script 'new_scheme.js' /}  
+#{/set}
+
+#{set 'moreStyles'}
+	#{stylesheet 'new_scheme.css' /}
+#{/set}
+
+<input id="table_name" type="text" class="col_3" placeholder="Table name" />
+<button id="create_table" class="medium blue">Create table</button>
+
+<div id="tables_wrapper">
+</div>

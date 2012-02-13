@@ -14,6 +14,10 @@ public class Schema extends Controller {
 		render();
 	}
 	
+	public static void new_scheme() {
+		render();
+	}
+	
 	public static void create(JsonObject body, Long projectId) {
 		System.out.println(body.toString());
 		SchemaManager mr = new SchemaManager();
