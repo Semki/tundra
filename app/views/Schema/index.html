@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>#{get 'title' /}</title>
+        <meta charset="${_response_encoding}">
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+		<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+		
+		<link rel="stylesheet" type="text/css" href="@{'/public/css/kickstart.css'}" media="all" />
+		<link rel="stylesheet" type="text/css" href="@{'/public/css/style.css'}" media="all" />
+        #{get 'moreStyles' /}
+        <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+        
+        <script src="@{'/public/js/jquery-1.6.4.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+        <script type="text/javascript" src="@{'/public/js/prettify.js'}"></script>
+		<script type="text/javascript" src="@{'/public/js/kickstart.js'}"></script>
+        #{get 'moreScripts' /}
+    </head>
+    <body>
+		<input type='button' id='test_btn' value='test' />
+    	<script>
+    		
+$(document).ready(function() {
+	
+	
+
+	
+	$('#test_btn').click(function(){
+	
+		var schemaObject = {user_id: 'alexey',
+							project_id: 100,
+							tables: [
+								{
+									table_name: 'Person',
+									columns: [
+										{column_name: 'name', type: 'string'},
+										{column_name: 'age', type: 'integer'},
+										{column_name: 'sex', type: 'boolean'}
+									]
+								},
+								{
+									table_name: 'Address',
+									columns: [
+										{column_name: 'city', type: 'string'},
+										{column_name: 'street', type: 'string'},
+										{column_name: 'building', type: 'string'},
+										{column_name: 'person_id', type: 'integer'}
+									]
+								}
+							]};
+							
+		
+				
+		$.post("/schema/create", JSON.stringify(schemaObject), function(data) {
+	        
+	    }, "json");
+	});
+});
+/*
+JSON.stringify = JSON.stringify || function (obj) {
+    var t = typeof (obj);
+    if (t != "object" || obj === null) {
+        // simple data type
+        if (t == "string") obj = '"'+obj+'"';
+        return String(obj);
+    }
+    else {
+        // recurse array or object
+        var n, v, json = [], arr = (obj && obj.constructor == Array);
+        for (n in obj) {
+            v = obj[n]; t = typeof(v);
+            if (t == "string") v = '"'+v+'"';
+            else if (t == "object" && v !== null) v = JSON.stringify(v);
+            json.push((arr ? "" : '"' + n + '":') + String(v));
+        }
+        return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+    }
+};*/
+    	</script>
+    </body>
+</html>
