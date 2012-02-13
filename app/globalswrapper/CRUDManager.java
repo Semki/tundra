@@ -37,11 +37,10 @@ public class CRUDManager {
         node = connectionManager.getConnection().createNodeReference(globalName);
         node.increment(1);
         Long id = node.getLong();
-        
-        
-    
+     
        
         node.set("TESTTT", id, "Field1");
+
         
         return response;
     }
@@ -57,6 +56,7 @@ public class CRUDManager {
     {
     	JsonObject response = new JsonObject();
     	return response;
+
     }
     
     
