@@ -12,26 +12,19 @@ public class CRUD extends BaseController{
 
 	public static void show(Long projectId, String tableName, long id)
 	{
-		try
-		{
+		try	{
 			CRUDManager manager = CRUDManager.Instance();
 			JsonObject result = manager.Read(projectId, tableName, id);
-			if (result == null)
-			{
+			if (result == null){
 				notFound();
 			}
-			else
-			{
+			else{
 				renderJSON(result);
 			}
-		}
-		catch (Exception ex)
-		{
+		}catch (Exception ex){
 			internalError();
 		}
 	}
-	
-	
 
 	public static void create(Long projectId, String tableName, JsonObject object)
 	{
@@ -39,8 +32,7 @@ public class CRUD extends BaseController{
 			CRUDManager manager = CRUDManager.Instance();
 			JsonObject result = new JsonObject();
 			result = manager.Create(projectId, tableName, object);
-			if (result != null)
-			{
+			if (result != null){
 				ok();
 			}
 		}catch(Exception ex){
@@ -48,13 +40,25 @@ public class CRUD extends BaseController{
 		}
 	}
 	
-	public static void delete(String id)
+	public static void delete(Long projectId, String tableName, long id)
 	{
-	
+		try{
+			CRUDManager manager = CRUDManager.Instance();
+			manager.Delete(projectId, tableName, id);
+			ok();
+		}catch(Exception ex){
+			internalError();
+		}
 	}
 	
-	public static void update(JsonObject object)
-	{
-	
+	public static void update(Long projectId, String tableName, JsonObject object)
+	{	
+		try{
+			CRUDManager manager = CRUDManager.Instance();
+			manager.Update(projectId, tableName, object);
+			ok();
+		}catch(Exception ex){
+			internalError();
+		}
 	}
 }
