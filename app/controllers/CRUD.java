@@ -16,16 +16,13 @@ public class CRUD extends Controller{
 	
 	public static void create(String tableName, JsonObject object)
 	{
-		System.out.println("try");
-		System.out.println(tableName +"  fgdffg ");
 		CRUDManager manager = CRUDManager.Instance();
+		JsonObject result = new JsonObject();
 		try{
-			//JsonObject obj = manager.Create(tableName, object);
-		}catch (Exception e) {
-		
+			result = manager.Create(tableName, object);
+		}catch(Exception ex){
 		}
-		
-		renderJSON("");
+		renderJSON(result);
 	}
 	
 	public static void delete(String id)
@@ -33,7 +30,7 @@ public class CRUD extends Controller{
 	
 	}
 	
-	public static void update(JsonObject body)
+	public static void update(JsonObject object)
 	{
 	
 	}
