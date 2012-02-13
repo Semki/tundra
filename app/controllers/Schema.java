@@ -18,7 +18,7 @@ public class Schema extends BaseController {
 		render();
 	}
 	
-	public static void create(JsonObject body, Long projectId) {
+	public static void create(JsonObject body) {
 		System.out.println(body.toString());
 		SchemaManager mr = new SchemaManager();
 		Long projectId = body.get("project_id").getAsLong();
