@@ -15,7 +15,7 @@ public class Schema extends Controller {
 	}
 	
 	public static void create(JsonObject body) {
-		System.out.println("Test");
+		System.out.println(body.toString());
 		SchemaManager mr = new SchemaManager();
 		try {
 			

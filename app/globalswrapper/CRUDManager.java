@@ -24,7 +24,7 @@ public class CRUDManager {
         return _manager;
     }
     
-    public void Create(String tableName, JsonObject object) throws Exception
+    public JsonObject Create(String tableName, JsonObject object) throws Exception
     {
         String globalName = Utils.TableNameToGlobalsName(tableName);
         
@@ -36,11 +36,10 @@ public class CRUDManager {
         node = connectionManager.getConnection().createNodeReference(globalName);
         node.increment(1);
         Long id = node.getLong();
-        
-        
-    
+     
        
         node.set("TESTTT", id, "Field1");
+        return new JsonObject();
     }
     
 
