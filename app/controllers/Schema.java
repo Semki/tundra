@@ -10,7 +10,7 @@ import play.mvc.Controller;
 public class Schema extends Controller {
 	
 	public static void index() {
-		//System.out.println("dasfds");
+		System.out.println("dasfds");
 		render();
 	}
 	
@@ -22,9 +22,12 @@ public class Schema extends Controller {
 			mr.InitSchema(body);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			System.out.println(e.toString());
 			e.printStackTrace();
 			Utils.writeToFile("", e.toString());
 		}
+		
+		renderJSON("[]");
 	}
 
 	public static void read(){
