@@ -7,19 +7,17 @@ import com.google.gson.JsonObject;
 
 import play.mvc.Controller;
 
-public class Schema extends Controller {
+public class Schema extends BaseController {
 	
 	public static void index() {
-		System.out.println("dasfds");
 		render();
 	}
 	
-	public static void create(JsonObject body, Long projectId) {
+	public static void create(JsonObject body) {
 		System.out.println(body.toString());
 		SchemaManager mr = new SchemaManager();
-		try {
-			
-			mr.InitSchema(body, projectId);
+		try {			
+			mr.InitSchema(body);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			System.out.println(e.toString());
