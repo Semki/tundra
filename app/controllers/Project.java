@@ -1,5 +1,6 @@
 package controllers;
 
+import globalswrapper.ProjectManager;
 import globalswrapper.SchemaManager;
 import globalswrapper.Utils;
 
@@ -17,7 +18,11 @@ public class Project extends Controller {
 		render();
 	}
 	
-	public static void new_project(JsonObject data) {
+	public static void new_project(JsonObject body) {
+		System.out.println("data");
+		System.out.println(body);
+		body = ProjectManager.Instance().CreateProject(body);
+		
 		renderJSON("ok");
 	}
 }
