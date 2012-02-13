@@ -25,9 +25,12 @@ public class ConnectionManager {
     {
         if (_connection == null)
         {
+        	System.out.println("connection is null");
             try
             {
+            	System.out.println("trying to get new connection");
                  _connection =  (com.intersys.globals.Connection) ConnectionContext.getConnection(); // ConnectionContext.getConnection();
+                 System.out.println(_connection);
                 if (!_connection.isConnected())
                 {
                     _connection.connect("USER","_SYSTEM","DATA");
