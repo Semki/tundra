@@ -1,7 +1,12 @@
 package globalswrapper;
 
+import java.lang.reflect.Field;
+
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.intersys.globals.*;
+
+
 
 public class CRUDManager {
 	
@@ -24,42 +29,74 @@ public class CRUDManager {
         return _manager;
     }
     
+    public static String ID = "Id";
     public JsonObject Create(Long projectId, String tableName, JsonObject object) throws Exception
     {
-    	JsonObject response = new JsonObject();
+    	tableName = tableName + SchemaManager.Instance().GetProjectPrefix(projectId);
         String globalName = Utils.TableNameToGlobalsName(tableName);
         
-        //NodeReference node = connectionManager.getConnection().createNodeReference(globalsName);
-        //node.appendSubscript("");
-        //String subscr = "";
-        //subscr = node.nextSubscript();   
+        /*if (object.has(ID))
+        {
+        	
+        }*/
         NodeReference node = null;
         node = connectionManager.getConnection().createNodeReference(globalName);
         node.increment(1);
-        Long id = node.getLong();
-     
+        object.addProperty(ID, node.getString());
+        node.set(object.toString(), node.getLong(), "JSON");     
          
-        return response;
+        return object;
     }
     
     public JsonObject Read(Long projectId, String tableName, long id) throws Exception
     {
-    	JsonObject response = new JsonObject();
+    	tableName = tableName + SchemaManager.Instance().GetProjectPrefix(projectId);
+        String globalName = Utils.TableNameToGlobalsName(tableName);
+        
+        
+        NodeReference node =   connectionManager.getConnection().createNodeReference(globalName);
+        node.setSubscriptCount(0);
+        node.appendSubscript(id);
+        String nodeValue = node.getObject("JSON").toString();
+        JsonObject response = new com.google.gson.JsonParser().parse(nodeValue).getAsJsonObject(); 
     	return response;
     }
     
     
     public JsonObject Update(Long projectId, String tableName, JsonObject object) throws Exception
     {
-    	JsonObject response = new JsonObject();
-    	return response;
+    	tableName = tableName + SchemaManager.Instance().GetProjectPrefix(projectId);
+        String globalName = Utils.TableNameToGlobalsName(tableName);
+        
+        if (!object.has(ID))
+        {
+        	
+        	return null;
+        }
+        
+        String sid = object.get(ID).toString();
+        Long id = Long.parseLong(sid);
+        
+        
+        NodeReference node =   connectionManager.getConnection().createNodeReference(globalName);
+        node.setSubscriptCount(0);
+        node.appendSubscript(id);
+        
+        node.set(object.toString(), node.getLong(), "JSON"); 
+        return object;
 
     }
     
     
     public Boolean Delete(Long projectId, String tableName, long id) throws Exception
     {
-    	return true;
+    	tableName = tableName + SchemaManager.Instance().GetProjectPrefix(projectId);
+        String globalName = Utils.TableNameToGlobalsName(tableName);
+        NodeReference node =   connectionManager.getConnection().createNodeReference(globalName);
+        node.setSubscriptCount(0);
+        node.appendSubscript(id);
+        node.kill(); 
+        return true;
     }
     
     
