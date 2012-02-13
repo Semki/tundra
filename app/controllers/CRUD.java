@@ -25,8 +25,6 @@ public class CRUD extends BaseController{
 			internalError();
 		}
 	}
-	
-	
 
 	public static void create(Long projectId, String tableName, JsonObject object)
 	{
