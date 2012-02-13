@@ -1,5 +1,7 @@
 /* auto-generated file */
 
+tundraProjectId = ${project_id};
+
 <#list tables as table>
 
 	${table.table_name} = function(fields) {

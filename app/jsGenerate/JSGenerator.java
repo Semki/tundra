@@ -31,12 +31,14 @@ public class JSGenerator {
 		
 		Template template = cfg.getTemplate("test.ftl");
 		Map<String, Object> model = convertJsonToModel(schema);
-
+		
+		model.put("project_id", projectId);
+		
 		/* Merge data-model with template */
 		
 		
 		
-		Writer out = new FileWriter(new File(System.getProperty("application.path"), "/public/js/output/models"+projectId+".js"));		
+		Writer out = new FileWriter(new File(System.getProperty("application.path"), "/public/js/models/models"+projectId+".js"));		
 	  
 	    template.process(model, out);
 	    out.flush();
