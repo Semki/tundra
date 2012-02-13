@@ -24,7 +24,7 @@ public class CRUDManager {
         return _manager;
     }
     
-    public JsonObject Create(String tableName, JsonObject object) throws Exception
+    public JsonObject Create(Long projectId, String tableName, JsonObject object) throws Exception
     {
     	JsonObject response = new JsonObject();
         String globalName = Utils.TableNameToGlobalsName(tableName);
@@ -38,21 +38,18 @@ public class CRUDManager {
         node.increment(1);
         Long id = node.getLong();
      
-       
-        node.set("TESTTT", id, "Field1");
-
-        
+         
         return response;
     }
     
-    public JsonObject Read(String tableName, long id) throws Exception
+    public JsonObject Read(Long projectId, String tableName, long id) throws Exception
     {
     	JsonObject response = new JsonObject();
     	return response;
     }
     
     
-    public JsonObject Update(String tableName, JsonObject object) throws Exception
+    public JsonObject Update(Long projectId, String tableName, JsonObject object) throws Exception
     {
     	JsonObject response = new JsonObject();
     	return response;
@@ -60,7 +57,7 @@ public class CRUDManager {
     }
     
     
-    public Boolean Delete(String tableName, long id) throws Exception
+    public Boolean Delete(Long projectId, String tableName, long id) throws Exception
     {
     	return true;
     }
