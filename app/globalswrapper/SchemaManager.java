@@ -30,7 +30,7 @@ public class SchemaManager {
 		return _manager;
 	}
 	
-	public static SchemaManager Init()
+	private static SchemaManager Init()
 	{
 		return new SchemaManager();
 		
