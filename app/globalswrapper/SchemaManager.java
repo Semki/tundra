@@ -72,6 +72,17 @@ public class SchemaManager {
 	}
 	
 	
+	public static String STRING_TYPE = "string";
+	public static String INT_TYPE = "integer";
+	public static String NUMBER_TYPE = "number";
+	public static String DATE_TYPE = "date";
+	
+	public String GetFieldType(Long projectId, String tableName, String fieldName)
+	{
+		return "STRING_TYPE";
+		
+	}
+	
 	/*
 	// Создаем информацию о схеме данных через типовую структуру глобалов
 	public void CreateTableOld(JsonObject table)
