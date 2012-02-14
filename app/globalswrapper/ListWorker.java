@@ -46,6 +46,9 @@ public class ListWorker {
 	
 	public ArrayList<JsonObject> PaginateItems(ArrayList<JsonObject> items, PageInfo requiredPage)
 	{
+		if (requiredPage == null)
+			return items;
+		
 		int hiIndex = requiredPage.GetHiIndex();
 		if (hiIndex == 0)
 			return items;
