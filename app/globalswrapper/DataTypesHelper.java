@@ -10,12 +10,34 @@ import com.google.gson.JsonObject;
 
 public class DataTypesHelper {
 	
-	public static String STRING_TYPE = "string";
-	public static String DATE_TYPE = "date";
-	public static String INT_TYPE = "integer";
-	public static String NUMBER_TYPE = "number";
-	public static String BOOLEAN_TYPE = "boolean";
-	
+	public enum FieldType {
+		STRING_TYPE("string"),
+		DATE_TYPE("date"),
+		INT_TYPE("integer"),
+		NUMBER_TYPE("number"),
+		BOOLEAN_TYPE("boolean");
+		
+	    private String typeValue;
+	    
+	    private FieldType(String type) {
+	        typeValue = type;
+	    }
+	    
+	    static public FieldType getType(String pType) {
+	        for (FieldType type: FieldType.values()) {
+	            if (type.getTypeValue().equals(pType)) {
+	                return type;
+	            }
+	        }
+	        throw new RuntimeException("unknown type");
+	    }
+	    
+	    public String getTypeValue() {
+	        return typeValue;
+	    }
+	    
+	}
+
 	public static String GetStringFromJSONObject(String fieldName, JsonObject object)
 	{
 		if (object.has(fieldName))

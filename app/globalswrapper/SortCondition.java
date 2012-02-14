@@ -1,8 +1,71 @@
 package globalswrapper;
 
+import globalswrapper.DataTypesHelper.FieldType;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+
+import org.hibernate.type.descriptor.java.DataHelper;
+
+import com.google.gson.JsonObject;
+import com.ning.http.util.DateUtil;
+
 public class SortCondition {
 	// 1 - вытаскиваю поле для сортировки и узнаю его тип
 	// 2 - выбираю функцию сортировки исходя из типа
-	// 
+	//
+	public ArrayList<JsonObject> Items;
+	public String fieldName;
+	public String fieldType;
 
+	public void sort() {
+		Collections.sort(Items, getComparator());
+	}
+
+	public Comparator<JsonObject> getComparator() {
+		FieldType type = FieldType.getType(fieldType);
+		switch (type) {
+			case STRING_TYPE: return new StringComparator(); 
+			case INT_TYPE: return new IntComparator();
+			case DATE_TYPE: return new DateComparator();
+			case BOOLEAN_TYPE: return new BooleanComparator();
+			default: throw new RuntimeException("unknown type");		
+		}
+	}
+
+	class StringComparator implements Comparator<JsonObject> {
+		public int compare(JsonObject o1, JsonObject o2) {
+			String field1 = DataTypesHelper.GetStringFromJSONObject(fieldName,o1);
+			String field2 = DataTypesHelper.GetStringFromJSONObject(fieldName,o2);
+			return field1.compareToIgnoreCase(field2);
+		}
+	}
+
+	class IntComparator implements Comparator<JsonObject> {
+		public int compare(JsonObject o1, JsonObject o2) {
+			Integer field1 = DataTypesHelper
+					.GetIntFromJSONObject(fieldName, o1);
+			Integer field2 = DataTypesHelper
+					.GetIntFromJSONObject(fieldName, o2);
+			return field1.compareTo(field2);
+		}
+	}
+
+	class DateComparator implements Comparator<JsonObject> {
+		public int compare(JsonObject o1, JsonObject o2) {
+			Date field1 = DataTypesHelper.GetDateFromJSONObject(fieldName, o1);
+			Date field2 = DataTypesHelper.GetDateFromJSONObject(fieldName, o1);
+			return field1.compareTo(field2);
+		}
+	}
+	
+	class BooleanComparator implements Comparator<JsonObject> {
+		public int compare(JsonObject o1, JsonObject o2) {
+			Boolean field1 = DataTypesHelper.GetBooleanFromJSONObject(fieldName, o1);
+			Boolean field2 = DataTypesHelper.GetBooleanFromJSONObject(fieldName, o1);
+			return field1.compareTo(field2);
+		}
+	}
 }

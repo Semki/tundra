@@ -1,5 +1,7 @@
 package globalswrapper;
 
+import globalswrapper.DataTypesHelper.FieldType;
+
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
@@ -83,8 +85,7 @@ public class SchemaManager {
 			return column.get(DATA_TYPE).getAsString();
 		}
 		
-		return DataTypesHelper.STRING_TYPE;
-		
+		return FieldType.STRING_TYPE.toString();	
 	}
 	
 	private JsonObject GetColumnInfo(JsonObject table, String columnName)
