@@ -29,23 +29,22 @@ $(document).ready(function() {
 	$('#test_btn').click(function(){
 	
 		var schemaObject = {user_id: 'alexey',
-							project_id: 100,
+							project_id: 1,
 							tables: [
 								{
-									table_name: 'Person',
+									table_name: 'Post',
 									columns: [
-										{column_name: 'name', type: 'string'},
-										{column_name: 'age', type: 'integer'},
-										{column_name: 'sex', type: 'boolean'}
+                    {column_name: 'title', type: 'string'},
+										{column_name: 'content', type: 'string'},
+										{column_name: 'date_create', type: 'string'}
 									]
 								},
 								{
-									table_name: 'Address',
+									table_name: 'Comment',
 									columns: [
-										{column_name: 'city', type: 'string'},
-										{column_name: 'street', type: 'string'},
-										{column_name: 'building', type: 'string'},
-										{column_name: 'person_id', type: 'integer'}
+										{column_name: 'content', type: 'string'},
+                    {column_name: 'date_create', type: 'string'},
+										{column_name: 'post_id', type: 'integer'},
 									]
 								}
 							]};
@@ -57,26 +56,7 @@ $(document).ready(function() {
 	    }, "json");
 	});
 });
-/*
-JSON.stringify = JSON.stringify || function (obj) {
-    var t = typeof (obj);
-    if (t != "object" || obj === null) {
-        // simple data type
-        if (t == "string") obj = '"'+obj+'"';
-        return String(obj);
-    }
-    else {
-        // recurse array or object
-        var n, v, json = [], arr = (obj && obj.constructor == Array);
-        for (n in obj) {
-            v = obj[n]; t = typeof(v);
-            if (t == "string") v = '"'+v+'"';
-            else if (t == "object" && v !== null) v = JSON.stringify(v);
-            json.push((arr ? "" : '"' + n + '":') + String(v));
-        }
-        return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
-    }
-};*/
+
     	</script>
     </body>
 </html>

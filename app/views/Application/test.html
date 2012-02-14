@@ -8,16 +8,50 @@
 		<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 		
        
-       <script type="text/javascript" src="@{'/public/js/tundra.js'}"></script>
-        <script type="text/javascript" src="@{'/public/js/output/models100.js'}"></script>
+    <script type="text/javascript" src="@{'/public/js/tundra.js'}"></script>
+    <script type="text/javascript" src="@{'/public/js/models/models1.js'}"></script>
 
       
     </head>
     <body>
-		
-    	<script>
-        person = Person.get(1);
+      <form>
+        <label>Title</label>
+        <input type='text' id='post_title' />
+        <br />
+        
+        <label>Text</label>
+        <textarea id='post_content'></textarea>
+        <br />
+      
+        <input type="button" id="create_post_btn" value="Create Post" />
+      </form>
+      
+      <ul id="posts">
+        
+      </ul>
 
+    	<script>
+        $(document).ready(function(){
+          
+          Post.getAll(function(posts){
+            for (var post in posts) {
+               $("#posts").append("<li>df</li>")
+            }
+          });
+          
+          $('#create_person_btn').click(function(){        
+            post = new Post;
+            post.title = $('#post_title').val();
+            post.content = $('#post_content').val();
+            post.save(function(){
+              alert('i am saved');
+            })
+          });
+          
+        });
+        
+        
+       
     	</script>
     </body>
 </html>
