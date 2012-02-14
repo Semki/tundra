@@ -1,5 +1,8 @@
 package globalswrapper;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 public class FilterApplicator {
 
 	
@@ -14,16 +17,21 @@ public class FilterApplicator {
 		
 	}
 	
-	public Boolean IsValid(Object nodeValue)
+	public Boolean IsFiltered(JsonObject object)
+	{
+		return IsValid(object.get(Condition.FieldName));
+		
+	}
+	private Boolean IsValid(JsonElement nodeValue)
 	{
 		return ApplyTypedFilter(nodeValue);
 	}
 	
-	private Boolean ApplyTypedFilter(Object nodeValue)
+	private Boolean ApplyTypedFilter(JsonElement nodeValue)
 	{
 		if (DataType == "string")
 		{
-			return ApplyStringFilter(nodeValue.toString());
+			return ApplyStringFilter(nodeValue.getAsString());
 		}
 		
 		return true;
@@ -32,7 +40,7 @@ public class FilterApplicator {
 
 	private Boolean ApplyStringFilter(String nodeValue)
 	{
-		if (Condition.CondType.toString() == ConditionType.EQUAL)
+		if (Condition.CondType.equalsIgnoreCase(ConditionType.EQUAL))
 		{
 			return StringIsEqual(nodeValue);
 		}
@@ -53,7 +61,8 @@ public class FilterApplicator {
 	
 	private Boolean StringIsEqual(String nodeValue)
 	{
-		return nodeValue.equalsIgnoreCase(Condition.FilterValue.toString()); 
+		Boolean result = nodeValue.equalsIgnoreCase(Condition.FilterValue.toString()); 
+ 		return  result;
 	}
 	
 	

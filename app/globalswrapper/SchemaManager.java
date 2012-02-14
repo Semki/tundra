@@ -16,6 +16,7 @@ public class SchemaManager {
 	public static String DATA_TYPE = "type";
 	public static String TABLE_NAME = "table_name";
 	public static String COLUMN_TYPE = "ColumnType";
+	public static String COLUMN_NAME = "column_name";
 	public static String REQUIRED = "Required";
 	
 	
@@ -72,15 +73,38 @@ public class SchemaManager {
 	}
 	
 	
-	public static String STRING_TYPE = "string";
-	public static String INT_TYPE = "integer";
-	public static String NUMBER_TYPE = "number";
-	public static String DATE_TYPE = "date";
 	
 	public String GetFieldType(Long projectId, String tableName, String fieldName)
 	{
-		return "STRING_TYPE";
+		JsonObject tableInfo = ReadTable(tableName, projectId);
+		JsonObject column = GetColumnInfo(tableInfo, fieldName);
+		if (column != null)
+		{
+			return column.get(DATA_TYPE).getAsString();
+		}
 		
+		return DataTypesHelper.STRING_TYPE;
+		
+	}
+	
+	private JsonObject GetColumnInfo(JsonObject table, String columnName)
+	{
+		JsonArray columns = GetColumns(table);
+		for (int i=0; i<columns.size(); i++)
+		{
+			JsonObject column = columns.get(i).getAsJsonObject();
+			if (column.get(COLUMN_NAME).toString().equalsIgnoreCase(columnName))
+			{
+				return column;
+			}
+			
+		}
+		return null;
+	}
+	
+	private JsonArray GetColumns(JsonObject table)
+	{
+		return table.get(COLUMNS_NAME).getAsJsonArray();
 	}
 	
 	/*
@@ -111,7 +135,7 @@ public class SchemaManager {
 		
 		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(SchemaGlobalName);
 	    String tableName = table.get(TABLE_NAME).getAsString();
-	    JsonArray columns = table.get(COLUMNS_NAME).getAsJsonArray();
+	    JsonArray columns = GetColumns(table);
 	    node.set(columns.toString(), tableName, COLUMNS_NAME);
 	    node.close();
 	}

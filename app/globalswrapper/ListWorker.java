@@ -24,6 +24,10 @@ public class ListWorker {
 		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(globalName);
 		
 		Long key = (long)0;
+		
+		// Filter Name
+		FilterApplicator applicator = new FilterApplicator(condition);
+		
 		while (true)
 		{
 			String strKey = node.nextSubscript(key);
@@ -32,7 +36,10 @@ public class ListWorker {
 			key = Long.parseLong(strKey);
 			String nodeValue = node.getObject(key, "JSON").toString();
 			JsonObject obj = new JsonParser().parse(nodeValue).getAsJsonObject();
-			list.add(obj);
+			if (applicator.IsFiltered(obj))
+			{
+				list.add(obj);
+			}
 		}
 		
 		return list;
