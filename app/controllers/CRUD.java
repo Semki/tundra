@@ -1,7 +1,12 @@
 package controllers;
 
-import globalswrapper.CRUDManager;
+import java.util.ArrayList;
 
+import globalswrapper.CRUDManager;
+import globalswrapper.FilterCondition;
+import globalswrapper.ListWorker;
+
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import play.mvc.Controller;
@@ -10,6 +15,51 @@ import play.mvc.results.Error;
 
 public class CRUD extends BaseController{
 
+	// TODO: conditions
+	public static void list(Long projectId, String tableName)
+	{
+		try {
+			JsonArray jsonArray = new JsonArray(); 
+			
+			//JsonObject resultJson = new JsonObject();
+			
+			ListWorker listWorker = new ListWorker();
+			FilterCondition condition = new FilterCondition();
+			condition.ProjectId = projectId;
+			condition.TableName = tableName;
+			
+					
+			ArrayList<JsonObject> result = listWorker.GetList(condition, null, null);
+			
+			System.out.println(result.get(0).toString());
+			
+			
+			
+			//renderJSON(result.get(0));
+			
+			
+			
+			for (int i=0; i<result.size(); i++)
+			{
+				//result.get(i).;
+				jsonArray.add(result.get(i));
+				//result.get
+			}
+			
+			renderJSON(jsonArray.toString());
+			/*
+			//resultJson.
+			//jsonArray.
+			
+			renderJSON(jsonArray);
+			*/
+		}
+		catch (Exception ex){
+			System.out.println(ex.toString());
+			internalError();
+		}
+	}
+	
 	public static void show(Long projectId, String tableName, long id)
 	{
 		try	{
@@ -26,16 +76,17 @@ public class CRUD extends BaseController{
 		}
 	}
 
-	public static void create(Long projectId, String tableName, JsonObject object)
+	public static void create(Long projectId, String tableName, JsonObject body)
 	{
 		try{
 			CRUDManager manager = CRUDManager.Instance();
 			JsonObject result = new JsonObject();
-			result = manager.Create(projectId, tableName, object);
+			result = manager.Create(projectId, tableName, body);
 			if (result != null){
 				ok();
 			}
 		}catch(Exception ex){
+			System.out.println(ex.toString());
 			internalError();
 		}
 	}
