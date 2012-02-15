@@ -9,6 +9,7 @@ public class ConditionType {
 	public static String NOTEQUAL = "!=";
 	public static String CONTAINS = " contains ";
 	
+	
 
 	
 	
