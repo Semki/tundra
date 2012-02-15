@@ -13,15 +13,13 @@ import com.google.gson.JsonObject;
 import com.ning.http.util.DateUtil;
 
 public class SortCondition {
-	// 1 - вытаскиваю поле для сортировки и узнаю его тип
-	// 2 - выбираю функцию сортировки исходя из типа
-	//
-	public ArrayList<JsonObject> Items;
+
 	public String fieldName;
 	public String fieldType;
 
-	public void sort() {
-		Collections.sort(Items, getComparator());
+	
+	public void sort(ArrayList<JsonObject> items) {
+		Collections.sort(items, getComparator());
 	}
 
 	public Comparator<JsonObject> getComparator() {

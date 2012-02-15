@@ -36,6 +36,7 @@ public class ListWorker {
 			key = Long.parseLong(strKey);
 			String nodeValue = node.getObject(key, "JSON").toString();
 			JsonObject obj = new JsonParser().parse(nodeValue).getAsJsonObject();
+			
 			if (applicator.IsFiltered(obj))
 			{
 				list.add(obj);
@@ -48,6 +49,7 @@ public class ListWorker {
 	
 	public ArrayList<JsonObject> SortItems(ArrayList<JsonObject> items, SortCondition condition)
 	{
+		condition.sort(items);
 		return items;
 	}
 	

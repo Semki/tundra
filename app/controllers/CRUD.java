@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import globalswrapper.CRUDManager;
 import globalswrapper.FilterCondition;
 import globalswrapper.ListWorker;
+import globalswrapper.SchemaManager;
+import globalswrapper.SortCondition;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -19,15 +21,23 @@ public class CRUD extends BaseController{
 	public static void list(Long projectId, String tableName)
 	{
 		try {
+			
 			JsonArray jsonArray = new JsonArray(); 
-
+			
+			String fieldName = "sex";
 			ListWorker listWorker = new ListWorker();
+		
 			FilterCondition condition = new FilterCondition();
 			condition.ProjectId = projectId;
 			condition.TableName = tableName;
-						
-			ArrayList<JsonObject> result = listWorker.GetList(condition, null, null);
+			condition.FieldName = fieldName;
 			
+			SortCondition sort = new SortCondition();
+			sort.fieldName = fieldName;
+			sort.fieldType = SchemaManager.Instance().GetFieldType(condition.ProjectId, condition.TableName, condition.FieldName);
+		
+			ArrayList<JsonObject> result = listWorker.GetList(condition, sort, null);
+
 			for (int i=0; i<result.size(); i++)
 			{
 				jsonArray.add(result.get(i));
