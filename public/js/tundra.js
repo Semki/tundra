@@ -49,6 +49,7 @@ TActiveRecord.prototype.destroy = function() {
     
 }
 
+
 TActiveRecord.open = function(modelClass, id) {
     var url = "objects/" + tundraProjectId + "/" + modelClass + "/" + id;
 
@@ -60,4 +61,47 @@ TActiveRecord.open = function(modelClass, id) {
     inst.id = id;
     return inst;
 }
+
+TActiveRecord.where = function(modelClass, field, predicate, value) {
+  var queryObject = new TQueryObject(modelClass);
+  return queryObject.where(field, predicate, value);
+}
+
+TQueryObject = function(modelClass) {
+    this.conditions = [];
+    this.modelClass = modelClass;
+    return this;
+}
+
+TQueryObject.prototype.where = function(field, predicate, value) {
+    this.conditions.push(new TCondition(field, predicate, value));
+    return this;
+};
+
+TQueryObject.prototype.getObjects = function(successCallback) {
+    var url = "objects/" + tundraProjectId + "/" +this.modelClass.tableName;
+    var modelClass = this.modelClass;
+    $.get(url, JSON.stringify(this.conditionsToTransport(this.conditions)), function(data) {
+      objects = [];
+      for (var i=0; i< data.length; i++)
+      {
+        obj = new modelClass(data[i]);
+        objects.push(obj);
+      }
+      successCallback.call(document, objects);
+    }, "json");
+};
+
+TQueryObject.prototype.conditionsToTransport = function(conditions) {
+    var transport = new Object();
+    transport.and = this.conditions;
+    return transport;
+};
+
+TCondition = function(field, predicate, value) {
+  this.field = field;
+  this.conditionType = predicate;
+  this.value = value;
+}
+
 

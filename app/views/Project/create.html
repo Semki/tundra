@@ -18,8 +18,9 @@ $(document).ready(function() {
 			$('#project_name').removeClass('error');
 			var result = {project_name: $('#project_name').val()};
 			$.post("/project/new_project", JSON.stringify(result),function (data) {
-				alert(data);
+				
 			}, "json");
+			window.location = "/project/list";
 		}
 	});
 });
