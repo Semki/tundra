@@ -15,9 +15,11 @@ GET     /public/                                staticDir:public
 
 GET /objects/{projectId}/{tableName}/{id}		CRUD.show
 
-GET /objects/{projectId}/{tableName}        CRUD.list
+GET /objects/{projectId}/{tableName}        	CRUD.list
 
 POST /objects/{projectId}/{tableName}		    CRUD.create
+
+DELETE /objects/{projectId}/{tableName}/{id}	CRUD.delete
 
 # Catch all
 *       /{controller}/{action}               {controller}.{action}

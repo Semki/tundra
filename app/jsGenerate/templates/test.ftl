@@ -1,4 +1,4 @@
-/* auto-generated file */
+/* Auto-generated file. You should not to modify it. */
 
 tundraProjectId = ${project_id};
 
@@ -18,4 +18,13 @@ tundraProjectId = ${project_id};
 	${table.table_name}.open = function(id) {
 	    return TActiveRecord.open(this, id);
 	}
+	${table.table_name}.method = function(methodName, methodBody) {
+    	TActiveRecord.method(this, methodName, methodBody);
+  	}
+  	
+  	${table.table_name}.deleteId = function(id, successCallback) {
+    	TActiveRecord.deleteId(this, id, successCallback);
+   	}
+  }
+  	
 </#list>

@@ -1,5 +1,5 @@
 TActiveRecord = function(fields) {
-    this.id = null;
+    this.Id = null;
        
     for(var field in fields) {
         if(fields.hasOwnProperty(field))
@@ -28,7 +28,23 @@ TActiveRecord.getAll = function(modelClass, successCallback) {
     }, "json");
      
 }
-    
+
+TActiveRecord.deleteId = function(modelClass, id, successCallback) {
+    var url = "objects/" + tundraProjectId + "/" + modelClass.tableName + "/" + id;
+    $.ajax({
+      type: "DELETE",
+      url: url,
+      success: function(){
+        successCallback.call(document);
+      },
+      dataType: "json"
+    });
+}
+
+TActiveRecord.method = function(modelClass, methodName, methodBody) {
+    modelClass.prototype[methodName] = methodBody;
+}
+ 
 TActiveRecord.prototype.destroy = function() {
     
 }
