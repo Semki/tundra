@@ -43,10 +43,9 @@ public class Schema extends BaseController {
 		renderJSON("[]");
 	}
 
-	public static void read(JsonObject body){
-		Long projectId = body.get("project_id").getAsLong();
+	public static void read(Long projectId){
 		SchemaManager mr = SchemaManager.Instance();
-		body = mr.ReadSchema(projectId);		
+		JsonObject body = mr.ReadSchema(projectId);		
 		renderJSON(body);	
 	}
 }
