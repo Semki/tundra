@@ -21,6 +21,8 @@ $(document).ready(function () {
 			});
 			result.tables.push(table);
 		});
+		
+		
 	};
 	
 	$.get("/schema/read/" + project_id, function (data) {
