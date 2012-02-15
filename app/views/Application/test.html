@@ -8,6 +8,8 @@
         <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->   
         <script type="text/javascript" src="@{'/public/js/tundra.js'}"></script>
         <script type="text/javascript" src="@{'/public/js/models/models1.js'}"></script>
+        <link rel="stylesheet" type="text/css" href="/public/css/test.css">
+
     </head>
     <body>
     
@@ -21,7 +23,10 @@
       
         <input type="button" id="create_post_btn" value="Create Post" />
         <input type="button" id="refresh_posts_btn" value="Refresh Posts" />
-      
+        
+        <br />
+        <input type="text" id="search_text" />
+        <input type="button" id="search_btn" value="Search" />
       
       <ul id="posts">
         
@@ -37,23 +42,33 @@
         */
         
         Post.method('toHtml', function(){ 
-          result = "<li class='post'>";
-          result = result + "<h3>"+this.title+"</h3>";
+          result = "<li class='post' post_id='"+this.Id+"'>";
+          result = result + "<h3>"+this.title;
+          result = result + "<a class='post_delete' post_id='"+this.Id+"' href='#'>Delete</a>"
+          result = result + "<a class='post_edit'   post_id='"+this.Id+"' href='#'>Edit</a></h3>"
           result = result + "<div class='post_content'>"+ this.content+ "</div>";
-          result = result + "<input type='button' class='post_delete' post_id='"+this.Id+"' value='delete'>"
+          
+          result = result + "<input type='button' class='create_comment_btn' post_id='"+this.Id+"' value='Comment It'>"
           result = result + "</li>";
           return result;
         });
-      
+        
+        
+  
         /* Init listeners */
         
-        RefreshPosts = function(){
-          Post.getAll(function(posts){
-            $("#posts").empty();
+        RedrawPosts = function(posts) {
+          $("#posts").empty();
             for (var key in posts) {
               var post = posts[key];
               $("#posts").append(post.toHtml());
             }  
+
+        }
+        
+        RefreshPosts = function(){
+          Post.getAll(function(posts){
+            RedrawPosts(posts);
           });
         };
         
@@ -73,6 +88,23 @@
             RefreshPosts();
           });
         });
+        
+        $(document).delegate(".post_edit", "click", function(){
+          /*
+          var postId = $(this).attr("post_id");
+          alert(postId);
+          post = Post.open(postId);
+          */
+          
+        });
+        
+        $('#search_btn').click(function(){
+          var searchText = $('#search_text').val();
+          var t = Post.where('content','contains',searchText).getObjects(function(posts){
+            RedrawPosts(posts);
+          });
+        });
+        
         
         /* Let's go */
         

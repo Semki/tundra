@@ -62,9 +62,38 @@ public class FilterApplicator {
 		
 	}
 
+	// coming soon
 	private Boolean ApplyDateFilter(Date date)
 	{
-		return true;
+		// 1 > 0 = -1 <
+		Date filterValue = DataTypesHelper.StringToDate(Condition.FilterValue.toString());
+		
+		if (Condition.CondType.equalsIgnoreCase(ConditionType.GRETATEOREQUAL))
+		{
+			return (date.compareTo(filterValue) >= 0);
+		}
+		
+		if (Condition.CondType.equalsIgnoreCase(ConditionType.GREATER))
+		{
+			return (date.compareTo(filterValue) > 0);
+		}
+
+		if (Condition.CondType.equalsIgnoreCase(ConditionType.LESOREQUAL))
+		{
+			return (date.compareTo(filterValue) >= 0);
+		}
+		
+		if (Condition.CondType.equalsIgnoreCase(ConditionType.LESS))
+		{
+			return (date.compareTo(filterValue) > 0);
+		}
+
+		if (Condition.CondType.equalsIgnoreCase(ConditionType.EQUAL))
+		{
+			return (date.compareTo(filterValue) == 0);
+		}
+		
+		return false;
 	}
 	
 	private Boolean ApplyBooleanFilter(Boolean nodeValue)
