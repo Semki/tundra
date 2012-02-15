@@ -33,8 +33,8 @@ public class CRUD extends BaseController{
 			condition.FieldName = fieldName;
 			
 			SortCondition sort = new SortCondition();
-			sort.fieldName = fieldName;
-			sort.fieldType = SchemaManager.Instance().GetFieldType(condition.ProjectId, condition.TableName, condition.FieldName);
+			//sort.fieldName = fieldName;
+			//sort.fieldType = SchemaManager.Instance().GetFieldType(condition.ProjectId, condition.TableName, condition.FieldName);
 		
 			ArrayList<JsonObject> result = listWorker.GetList(condition, sort, null);
 
