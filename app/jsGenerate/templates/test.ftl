@@ -25,6 +25,6 @@ tundraProjectId = ${project_id};
   	${table.table_name}.deleteId = function(id, successCallback) {
     	TActiveRecord.deleteId(this, id, successCallback);
    	}
-  }
+  
   	
 </#list>

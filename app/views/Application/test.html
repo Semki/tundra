@@ -8,6 +8,8 @@
         <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->   
         <script type="text/javascript" src="@{'/public/js/tundra.js'}"></script>
         <script type="text/javascript" src="@{'/public/js/models/models1.js'}"></script>
+        <link rel="stylesheet" type="text/css" href="/public/css/test.css">
+
     </head>
     <body>
     
@@ -38,13 +40,17 @@
         
         Post.method('toHtml', function(){ 
           result = "<li class='post'>";
-          result = result + "<h3>"+this.title+"</h3>";
+          result = result + "<h3>"+this.title;
+          result = result + "<a class='post_delete' post_id='"+this.Id+"' value='delete' href='#'>Delete</a></h3>"
           result = result + "<div class='post_content'>"+ this.content+ "</div>";
-          result = result + "<input type='button' class='post_delete' post_id='"+this.Id+"' value='delete'>"
+          
+          result = result + "<input type='button' class='create_comment_btn' post_id='"+this.Id+"' value='Comment It'>"
           result = result + "</li>";
           return result;
         });
-      
+        
+        
+  
         /* Init listeners */
         
         RefreshPosts = function(){
