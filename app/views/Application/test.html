@@ -4,17 +4,13 @@
     <head>
         <title>#{get 'title' /}</title>
         <meta charset="${_response_encoding}">
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-		<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-		
-       
-    <script type="text/javascript" src="@{'/public/js/tundra.js'}"></script>
-    <script type="text/javascript" src="@{'/public/js/models/models1.js'}"></script>
-
-      
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+        <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->   
+        <script type="text/javascript" src="@{'/public/js/tundra.js'}"></script>
+        <script type="text/javascript" src="@{'/public/js/models/models1.js'}"></script>
     </head>
     <body>
-      <form>
+    
         <label>Title</label>
         <input type='text' id='post_title' />
         <br />
@@ -24,34 +20,67 @@
         <br />
       
         <input type="button" id="create_post_btn" value="Create Post" />
-      </form>
+        <input type="button" id="refresh_posts_btn" value="Refresh Posts" />
+      
       
       <ul id="posts">
         
       </ul>
 
-    	<script>
-        $(document).ready(function(){
-          
+      <script>
+ 
+      $(document).ready(function(){
+        
+        /* 
+          Dynamically adding behaviours to our models.
+          I think the best practice is to group these calls in separate JS-files  
+        */
+        
+        Post.method('toHtml', function(){ 
+          result = "<li class='post'>";
+          result = result + "<h3>"+this.title+"</h3>";
+          result = result + "<div class='post_content'>"+ this.content+ "</div>";
+          result = result + "<input type='button' class='post_delete' post_id='"+this.Id+"' value='delete'>"
+          result = result + "</li>";
+          return result;
+        });
+      
+        /* Init listeners */
+        
+        RefreshPosts = function(){
           Post.getAll(function(posts){
-            for (var post in posts) {
-               $("#posts").append("<li>df</li>")
-            }
+            $("#posts").empty();
+            for (var key in posts) {
+              var post = posts[key];
+              $("#posts").append(post.toHtml());
+            }  
           });
-          
-          $('#create_person_btn').click(function(){        
-            post = new Post;
-            post.title = $('#post_title').val();
-            post.content = $('#post_content').val();
-            post.save(function(){
-              alert('i am saved');
-            })
-          });
-          
+        };
+        
+        $('#create_post_btn').click(function(){        
+          post = new Post();
+          post.title = $('#post_title').val();
+          post.content = $('#post_content').val();
+          post.save(function(){
+            RefreshPosts();
+          })
         });
         
+        $(document).delegate(".post_delete", "click", function(){
+          var postId = $(this).attr("post_id");
+          Post.deleteId(postId, function(){
+            alert('Post was successfully deleted');
+            RefreshPosts();
+          });
+        });
         
-       
+        /* Let's go */
+        
+        RefreshPosts();
+        
+      });
+        
+
     	</script>
     </body>
 </html>
