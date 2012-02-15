@@ -21,6 +21,10 @@ POST /objects/{projectId}/{tableName}		    CRUD.create
 
 DELETE /objects/{projectId}/{tableName}/{id}	CRUD.delete
 
+GET /schema/new_scheme/{project_id} Schema.new_scheme
+
+POST /schema/create Schema.create
+
 # Catch all
 *       /{controller}/{action}               {controller}.{action}
 

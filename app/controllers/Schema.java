@@ -14,8 +14,8 @@ public class Schema extends BaseController {
 		render();
 	}
 	
-	public static void new_scheme() {
-		render();
+	public static void new_scheme(long project_id) {
+		render(project_id);
 	}
 	
 	public static void create(JsonObject body) {
