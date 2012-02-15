@@ -1,5 +1,7 @@
 package globalswrapper;
 
+import java.util.Date;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -8,17 +10,27 @@ public class FilterApplicator {
 	
 	private String DataType;
 	FilterCondition Condition;
+	Long projectId;
+	String tableName;
 	
-	
-	public FilterApplicator(FilterCondition condition)
+	public FilterApplicator(Long projectId, String tableName, FilterCondition condition)
 	{
-		this.DataType = SchemaManager.Instance().GetFieldType(condition.ProjectId, condition.TableName, condition.FieldName);
+		if (condition != null)
+		{
+			this.DataType = SchemaManager.Instance().GetFieldType(projectId, tableName, condition.FieldName);
+		}
+		this.projectId = projectId;
+		this.tableName = tableName;
 		this.Condition = condition;
 		
 	}
 	
 	public Boolean IsFiltered(JsonObject object)
 	{
+		if (Condition == null)
+		{
+			return true;
+		}
 		return IsValid(object.get(Condition.FieldName));
 		
 	}
@@ -34,10 +46,47 @@ public class FilterApplicator {
 			return ApplyStringFilter(nodeValue.getAsString());
 		}
 		
+		if (DataType == "date")
+		{
+			Date date = DataTypesHelper.StringToDate(nodeValue.getAsString());
+			return ApplyDateFilter(date);
+		}
+		
+		if (DataType == DataTypesHelper.FieldType.BOOLEAN_TYPE.getTypeValue())
+		{
+			Boolean value = nodeValue.getAsBoolean();
+			return ApplyBooleanFilter(value);
+		}
+		
 		return true;
 		
 	}
 
+	private Boolean ApplyDateFilter(Date date)
+	{
+		return true;
+	}
+	
+	private Boolean ApplyBooleanFilter(Boolean nodeValue)
+	{
+		Boolean filterValue = Boolean.parseBoolean(Condition.FilterValue.toString());
+		
+		if (Condition.CondType.equalsIgnoreCase(ConditionType.EQUAL))
+		{
+			return nodeValue == filterValue;
+		}
+		
+		if (Condition.CondType.equalsIgnoreCase(ConditionType.NOTEQUAL))
+		{
+			return nodeValue != filterValue;
+		}
+		
+	
+		return false;
+		
+	}
+	
+	
 	private Boolean ApplyStringFilter(String nodeValue)
 	{
 		if (Condition.CondType.equalsIgnoreCase(ConditionType.EQUAL))
