@@ -28,7 +28,7 @@ public class Project extends Controller {
 	}
 	
 	public static void get_projects_list() {
-		renderJSON(ProjectManager.Instance().GetProjectsList());
+		renderJSON(ProjectManager.Instance().GetProjectsList().toString());
 	}
 	
 	public static void list() {
