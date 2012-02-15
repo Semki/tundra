@@ -65,6 +65,7 @@ public class ProjectManager {
 			JsonObject project = new JsonObject();
 			project.addProperty("project_id", key);
 			project.addProperty("project_name", nodeValue);
+			
 			array.add(project);
 		}
 		node.close();
