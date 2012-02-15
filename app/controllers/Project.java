@@ -25,4 +25,12 @@ public class Project extends Controller {
 		
 		renderJSON("ok");
 	}
+	
+	public static void get_projects_list() {
+		renderJSON(ProjectManager.Instance().GetProjectsList());
+	}
+	
+	public static void list() {
+		render();
+	}
 }
