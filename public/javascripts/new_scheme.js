@@ -30,7 +30,7 @@ $(document).ready(function() {
 		
 		//alert(JSON.stringify(result));
 		$.post('/schema/create', JSON.stringify(result), function (data) {
-			//alert(data);
+			window.location = "/project/list";
 		}, "json");
 	});
 	 
