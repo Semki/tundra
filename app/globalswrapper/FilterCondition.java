@@ -9,7 +9,7 @@ public class FilterCondition {
 	public String TableName;
 	public Long ProjectId;
 	
-	public ConditionType CondType;
+	public String CondType;
 	public Object FilterValue;
 
 }
