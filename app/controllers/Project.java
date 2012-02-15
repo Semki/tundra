@@ -4,6 +4,7 @@ import globalswrapper.ProjectManager;
 import globalswrapper.SchemaManager;
 import globalswrapper.Utils;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import play.mvc.Controller;
