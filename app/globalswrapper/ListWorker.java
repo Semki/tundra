@@ -8,6 +8,15 @@ import com.intersys.globals.NodeReference;
 
 public class ListWorker {
 
+	public Long ProjectId;
+	public String TableName;
+	
+	public ListWorker(Long projectId, String tableName)
+	{
+		ProjectId = projectId;
+		TableName = tableName;
+	}
+	
 	public ArrayList<JsonObject> GetList(FilterCondition condition, SortCondition sort, PageInfo requiredPage)
 	{
 		ArrayList<JsonObject> list = ApplyFilter(condition);
@@ -20,13 +29,12 @@ public class ListWorker {
 	{
 		ArrayList<JsonObject> list = new ArrayList<JsonObject>();
 		
-		String globalName = Utils.TableNameToGlobalsName(condition.TableName+SchemaManager.Instance().GetProjectPrefix(condition.ProjectId));  
+		String globalName = Utils.TableNameToGlobalsName(TableName+SchemaManager.Instance().GetProjectPrefix(ProjectId));  
 		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(globalName);
 		
 		Long key = (long)0;
 		
-		// Filter Name
-		FilterApplicator applicator = new FilterApplicator(condition);
+		//FilterApplicator applicator = new FilterApplicator(condition);
 		
 		while (true)
 		{
@@ -36,11 +44,11 @@ public class ListWorker {
 			key = Long.parseLong(strKey);
 			String nodeValue = node.getObject(key, "JSON").toString();
 			JsonObject obj = new JsonParser().parse(nodeValue).getAsJsonObject();
-			
-			if (applicator.IsFiltered(obj))
+			list.add(obj);
+			/*if (applicator.IsFiltered(obj))
 			{
 				list.add(obj);
-			}
+			}*/
 		}
 		
 		return list;
@@ -49,7 +57,8 @@ public class ListWorker {
 	
 	public ArrayList<JsonObject> SortItems(ArrayList<JsonObject> items, SortCondition condition)
 	{
-		condition.sort(items);
+		if (condition != null)
+			condition.sort(items);
 		return items;
 	}
 	
