@@ -54,7 +54,7 @@ public class CRUDManager {
         String globalName = Utils.TableNameToGlobalsName(tableName);
         
         
-        NodeReference node =   connectionManager.getConnection().createNodeReference(globalName);
+        NodeReference node = connectionManager.getConnection().createNodeReference(globalName);
         node.setSubscriptCount(0);
         node.appendSubscript(id);
         String nodeValue = node.getObject("JSON").toString();
