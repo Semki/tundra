@@ -55,16 +55,21 @@ public class ProjectManager {
 		JsonArray array = new JsonArray();
 		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(SchemaManager.Instance().GetProjectsStorageGlobalsName());
 		Long key = (long)0;
+		JsonParser parser = new JsonParser();
+		
 		while (true)
 		{
 			String strKey = node.nextSubscript(key);
 			if (strKey.equals(""))
 				break;
 			key = Long.parseLong(strKey);
-			String nodeValue = node.getObject(key, "project_name").toString();
+			String nodeValue = node.getString(key, "project_name");
+			nodeValue = parser.parse(nodeValue).getAsString();
+			
 			JsonObject project = new JsonObject();
 			project.addProperty("project_id", key);
 			project.addProperty("project_name", nodeValue);
+			
 			array.add(project);
 		}
 		node.close();

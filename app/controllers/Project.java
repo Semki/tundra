@@ -20,15 +20,12 @@ public class Project extends Controller {
 	}
 	
 	public static void new_project(JsonObject body) {
-		System.out.println("data");
-		System.out.println(body);
 		body = ProjectManager.Instance().CreateProject(body);
-		
 		renderJSON("ok");
 	}
 	
 	public static void get_projects_list() {
-		renderJSON(ProjectManager.Instance().GetProjectsList());
+		renderJSON(ProjectManager.Instance().GetProjectsList().toString());
 	}
 	
 	public static void list() {

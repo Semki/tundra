@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import globalswrapper.CRUDManager;
 import globalswrapper.FilterCondition;
+import globalswrapper.FilterManager;
 import globalswrapper.ListWorker;
 import globalswrapper.SchemaManager;
 import globalswrapper.SortCondition;
@@ -18,25 +19,15 @@ import play.mvc.results.Error;
 public class CRUD extends BaseController{
 
 	// TODO: conditions
-	public static void list(Long projectId, String tableName)
+	public static void list(Long projectId, String tableName, JsonObject object)
 	{
 		try {
 			
 			JsonArray jsonArray = new JsonArray(); 
-			
-			String fieldName = "sex";
-			ListWorker listWorker = new ListWorker();
+			ListWorker listWorker = new ListWorker(projectId, tableName);
+			FilterManager filterManager = FilterManager.Instance(projectId, tableName, object); 
 		
-			FilterCondition condition = new FilterCondition();
-			condition.ProjectId = projectId;
-			condition.TableName = tableName;
-			condition.FieldName = fieldName;
-			
-			SortCondition sort = new SortCondition();
-			sort.fieldName = fieldName;
-			sort.fieldType = SchemaManager.Instance().GetFieldType(condition.ProjectId, condition.TableName, condition.FieldName);
-		
-			ArrayList<JsonObject> result = listWorker.GetList(condition, sort, null);
+			ArrayList<JsonObject> result = listWorker.GetList(filterManager.Filter, filterManager.Sort, filterManager.Page);
 
 			for (int i=0; i<result.size(); i++)
 			{

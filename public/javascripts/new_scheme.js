@@ -21,13 +21,17 @@ $(document).ready(function() {
 	};
 	
 	$('#generate_scheme').live('click', function () {
+		result.project_id = $('#project_id_container').text();
 		for (var i = 0; i < tablesCount; ++i) {
 			$.each($(".column_name"+i), function() {
 				result.tables[i].columns.push({column_name: this.textContent, type: "string"});
 			});
 		}
 		
-		alert(JSON.stringify(result));
+		//alert(JSON.stringify(result));
+		$.post('/schema/create', JSON.stringify(result), function (data) {
+			//alert(data);
+		}, "json");
 	});
 	 
 	$('button.add_column').live('click', function () {
