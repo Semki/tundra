@@ -25,4 +25,9 @@ public class Project extends Controller {
 		
 		renderJSON("ok");
 	}
+	
+	public static void getProjectsLis(){
+		renderJSON("");
+	}
+	
 }
