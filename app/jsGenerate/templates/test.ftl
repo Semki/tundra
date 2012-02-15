@@ -25,6 +25,10 @@ tundraProjectId = ${project_id};
   	${table.table_name}.deleteId = function(id, successCallback) {
     	TActiveRecord.deleteId(this, id, successCallback);
    	}
+   	
+   	${table.table_name}.where = function(field, predicate, value) {
+    	return TActiveRecord.where(this, field, predicate, value);
+  	}
   
   	
 </#list>

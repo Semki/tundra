@@ -23,7 +23,10 @@
       
         <input type="button" id="create_post_btn" value="Create Post" />
         <input type="button" id="refresh_posts_btn" value="Refresh Posts" />
-      
+        
+        <br />
+        <input type="text" id="search_text" />
+        <input type="button" id="search_btn" value="Search" />
       
       <ul id="posts">
         
@@ -39,9 +42,10 @@
         */
         
         Post.method('toHtml', function(){ 
-          result = "<li class='post'>";
+          result = "<li class='post' post_id='"+this.Id+"'>";
           result = result + "<h3>"+this.title;
-          result = result + "<a class='post_delete' post_id='"+this.Id+"' value='delete' href='#'>Delete</a></h3>"
+          result = result + "<a class='post_delete' post_id='"+this.Id+"' href='#'>Delete</a>"
+          result = result + "<a class='post_edit'   post_id='"+this.Id+"' href='#'>Edit</a></h3>"
           result = result + "<div class='post_content'>"+ this.content+ "</div>";
           
           result = result + "<input type='button' class='create_comment_btn' post_id='"+this.Id+"' value='Comment It'>"
@@ -53,13 +57,18 @@
   
         /* Init listeners */
         
-        RefreshPosts = function(){
-          Post.getAll(function(posts){
-            $("#posts").empty();
+        RedrawPosts = function(posts) {
+          $("#posts").empty();
             for (var key in posts) {
               var post = posts[key];
               $("#posts").append(post.toHtml());
             }  
+
+        }
+        
+        RefreshPosts = function(){
+          Post.getAll(function(posts){
+            RedrawPosts(posts);
           });
         };
         
@@ -79,6 +88,23 @@
             RefreshPosts();
           });
         });
+        
+        $(document).delegate(".post_edit", "click", function(){
+          /*
+          var postId = $(this).attr("post_id");
+          alert(postId);
+          post = Post.open(postId);
+          */
+          
+        });
+        
+        $('#search_btn').click(function(){
+          var searchText = $('#search_text').val();
+          var t = Post.where('content','contains',searchText).getObjects(function(posts){
+            RedrawPosts(posts);
+          });
+        });
+        
         
         /* Let's go */
         
