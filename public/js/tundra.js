@@ -78,10 +78,11 @@ TQueryObject.prototype.where = function(field, predicate, value) {
     return this;
 };
 
+
 TQueryObject.prototype.getObjects = function(successCallback) {
     var url = "objects/" + tundraProjectId + "/" +this.modelClass.tableName;
     var modelClass = this.modelClass;
-    $.get(url, JSON.stringify(this.conditionsToTransport(this.conditions)), function(data) {
+    $.get(url, {jsonParam:JSON.stringify(this.conditionsToTransport())}, function(data) {
       objects = [];
       for (var i=0; i< data.length; i++)
       {
@@ -92,16 +93,19 @@ TQueryObject.prototype.getObjects = function(successCallback) {
     }, "json");
 };
 
-TQueryObject.prototype.conditionsToTransport = function(conditions) {
+TQueryObject.prototype.conditionsToTransport = function() {
     var transport = new Object();
-    transport.and = this.conditions;
+  
+    
+    transport.filter = this.conditions[this.conditions.length-1];
+    
     return transport;
 };
 
 TCondition = function(field, predicate, value) {
-  this.field = field;
+  this.fieldName = field;
   this.conditionType = predicate;
-  this.value = value;
+  this.filterValue = value;
 }
 
 

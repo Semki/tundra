@@ -19,21 +19,20 @@ import play.mvc.results.Error;
 public class CRUD extends BaseController{
 
 	// TODO: conditions
-	public static void list(Long projectId, String tableName, JsonObject object)
+	public static void list(Long projectId, String tableName, JsonObject jsonParam)
 	{
 		try {
 			
-			object = new JsonObject();
-			/*JsonObject sort = new JsonObject();
-			sort.addProperty("fieldName", "post_id");
-			sort.addProperty("order", "desc");
-			
-			object.add("sort", sort);
-			*/
+			if (jsonParam==null)
+			{
+				jsonParam = new JsonObject();
+			}
+				
+			System.out.println(jsonParam.toString());
 			
 			JsonArray jsonArray = new JsonArray(); 
 			ListWorker listWorker = new ListWorker(projectId, tableName);
-			FilterConverter filterManager = FilterConverter.Instance(projectId, tableName, object); 
+			FilterConverter filterManager = FilterConverter.Instance(projectId, tableName, jsonParam); 
 		
 			ArrayList<JsonObject> result = listWorker.GetList(filterManager.Filter, filterManager.Sort, filterManager.Page);
 
@@ -45,6 +44,7 @@ public class CRUD extends BaseController{
 			renderJSON(jsonArray.toString());
 		}
 		catch (Exception ex){
+			ex.printStackTrace();
 			System.out.println(ex.toString());
 			internalError();
 		}
