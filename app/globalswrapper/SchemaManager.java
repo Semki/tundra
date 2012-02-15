@@ -85,7 +85,7 @@ public class SchemaManager {
 			return column.get(DATA_TYPE).getAsString();
 		}
 		
-		return FieldType.STRING_TYPE.toString();	
+		return FieldType.STRING_TYPE.getTypeValue();	
 	}
 	
 	private JsonObject GetColumnInfo(JsonObject table, String columnName)
