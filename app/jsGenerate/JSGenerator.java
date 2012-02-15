@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +16,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.corba.se.spi.activation.Server;
 
 
 import freemarker.template.*;
@@ -23,7 +25,7 @@ import freemarker.template.*;
 public class JSGenerator {
 	
 	
-	public void Generate(JsonObject schema, String projectId) throws IOException, TemplateException
+	public String Generate(JsonObject schema, String projectId) throws IOException, TemplateException
 	{
 		Configuration cfg = new Configuration();	
 		cfg.setDirectoryForTemplateLoading(new File(System.getProperty("application.path"), "/app/jsGenerate/templates"));	
@@ -36,12 +38,14 @@ public class JSGenerator {
 		
 		/* Merge data-model with template */
 		
+		String path = System.getProperty("application.path");
+		String fileName =  "/public/js/models/models"+projectId+".js";
 		
-		
-		Writer out = new FileWriter(new File(System.getProperty("application.path"), "/public/js/models/models"+projectId+".js"));		
-	  
+		Writer out = new FileWriter(new File(path, fileName));		
 	    template.process(model, out);
 	    out.flush();
+
+	    return fileName;
 			
 	}
 	

@@ -1,16 +1,21 @@
 package controllers;
 
+import java.net.InetAddress;
+
 import jsGenerate.JSGenerator;
 import globalswrapper.SchemaManager;
 import globalswrapper.Utils;
 
 import com.google.gson.JsonObject;
+import com.sun.corba.se.spi.activation.Server;
 
 import play.mvc.Controller;
 
 public class Schema extends BaseController {
 	
 	public static void index() {
+		
+		System.out.println(request);
 		render();
 	}
 	
@@ -34,16 +39,25 @@ public class Schema extends BaseController {
 		
 		// generate JavaScript
 		JSGenerator generator = new JSGenerator();
+		String url = "";
 		try {
-			generator.Generate(body, projectId.toString());
+			
+			String fileName = generator.Generate(body, projectId.toString());
+			InetAddress addr = InetAddress.getLocalHost();
+			String port = request.port.toString();					
+			String hostname = addr.getHostName();	
+			url = hostname+":"+port+fileName;
+			System.out.println(url);
+			
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
 		
-		renderJSON("[]");
+		renderJSON(url);
 	}
 
 	public static void read(Long projectId){
+		System.out.println("13234");
 		SchemaManager mr = SchemaManager.Instance();
 		JsonObject body = mr.ReadSchema(projectId);		
 		renderJSON(body);	
