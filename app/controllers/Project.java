@@ -4,6 +4,7 @@ import globalswrapper.ProjectManager;
 import globalswrapper.SchemaManager;
 import globalswrapper.Utils;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import play.mvc.Controller;
@@ -24,5 +25,13 @@ public class Project extends Controller {
 		body = ProjectManager.Instance().CreateProject(body);
 		
 		renderJSON("ok");
+	}
+	
+	public static void get_projects_list() {
+		renderJSON(ProjectManager.Instance().GetProjectsList());
+	}
+	
+	public static void list() {
+		render();
 	}
 }

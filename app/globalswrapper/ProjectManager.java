@@ -1,6 +1,9 @@
 package globalswrapper;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.intersys.globals.NodeReference;
 
 public class ProjectManager {
@@ -21,8 +24,8 @@ public class ProjectManager {
 	
 	public JsonObject CreateProject(JsonObject projectInfo)
 	{
-		System.out.println("projectInfo");
-		System.out.println(projectInfo);
+		//System.out.println("projectInfo");
+		//System.out.println(projectInfo);
 		if (projectInfo == null)
 			return null;
 		
@@ -39,9 +42,34 @@ public class ProjectManager {
 			node.set(name, nextId, PROJECT_NAME);
 			node.close();
 			projectInfo.addProperty("Id", nextId);
+			node.close();
 		}
 		
 		return projectInfo;
+	}
+	
+
+	
+	public JsonArray GetProjectsList()
+	{
+		JsonArray array = new JsonArray();
+		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(SchemaManager.Instance().GetProjectsStorageGlobalsName());
+		Long key = (long)0;
+		while (true)
+		{
+			String strKey = node.nextSubscript(key);
+			if (strKey.equals(""))
+				break;
+			key = Long.parseLong(strKey);
+			String nodeValue = node.getObject(key, "project_name").toString();
+			JsonObject project = new JsonObject();
+			project.addProperty("project_id", key);
+			project.addProperty("project_name", nodeValue);
+			array.add(project);
+		}
+		node.close();
+		return array;
+		
 	}
 
 }
