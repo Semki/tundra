@@ -22,7 +22,7 @@ public class SchemaManager {
 	public static String REQUIRED = "Required";
 	
 	
-	public static SchemaManager _manager;
+	private static SchemaManager _manager;
 	
 	public static SchemaManager Instance()
 	{
@@ -132,7 +132,7 @@ public class SchemaManager {
 	// Создаем информацию о схеме данных через типовую структуру глобалов
 	public void CreateTable(JsonObject table, Long projectId)
 	{
-		String SchemaGlobalName = GetTableStorageGlobalsName() + GetProjectPrefix(projectId);
+		String SchemaGlobalName = GetGlobalSchemaName(projectId);
 		
 		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(SchemaGlobalName);
 	    String tableName = table.get(TABLE_NAME).getAsString();
@@ -143,15 +143,48 @@ public class SchemaManager {
 	
 	public JsonObject ReadSchema(Long projectId)
 	{
+		String SchemaGlobalName = GetGlobalSchemaName(projectId);
+		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(SchemaGlobalName);
 		
 		JsonObject schema = new JsonObject();
+		schema.addProperty("project_id", projectId);
+		
+		JsonArray tables = new JsonArray();
+		String subscript = "";
+	    while (true)
+	    {
+	            subscript = node.nextSubscript(subscript);
+	            if (subscript.length() == 0)
+	            	break;
+	            
+	            JsonObject tableInfo = ReadTable(subscript, projectId);
+	            tables.add(tableInfo);
+	    }
+	    schema.add("tables", tables);
+	    
 		return schema;
 		
+	}
+	
+	public Boolean IsSchemaExist(Long projectId)
+	{
+		Boolean isExist = false;
+		String SchemaGlobalName = GetGlobalSchemaName(projectId);
+		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(SchemaGlobalName);
+		isExist = node.hasSubnodes();
+		node.close();
+		return isExist;
+		
+	}
+	
+	public String GetGlobalSchemaName(Long projectId)
+	{
+		return GetTableStorageGlobalsName() + GetProjectPrefix(projectId);
 	}
 	// Считываем схему
 	public JsonObject ReadTable(String tableName, Long projectId)
 	{
-		String SchemaGlobalName = GetTableStorageGlobalsName() + GetProjectPrefix(projectId);
+		String SchemaGlobalName = GetGlobalSchemaName(projectId);
 		JsonObject object = new JsonObject();
 		object.addProperty(TABLE_NAME, tableName);
 		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(SchemaGlobalName);

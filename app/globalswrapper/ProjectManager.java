@@ -69,7 +69,8 @@ public class ProjectManager {
 			JsonObject project = new JsonObject();
 			project.addProperty("project_id", key);
 			project.addProperty("project_name", nodeValue);
-			
+			Boolean isSchemaExists = SchemaManager.Instance().IsSchemaExist(key);
+			project.addProperty("IsSchemaExists", isSchemaExists);
 			array.add(project);
 		}
 		node.close();
