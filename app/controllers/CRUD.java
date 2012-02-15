@@ -20,39 +20,20 @@ public class CRUD extends BaseController{
 	{
 		try {
 			JsonArray jsonArray = new JsonArray(); 
-			
-			//JsonObject resultJson = new JsonObject();
-			
+
 			ListWorker listWorker = new ListWorker();
 			FilterCondition condition = new FilterCondition();
 			condition.ProjectId = projectId;
 			condition.TableName = tableName;
-			
-					
+						
 			ArrayList<JsonObject> result = listWorker.GetList(condition, null, null);
-			
-			System.out.println(result.get(0).toString());
-			
-			
-			
-			//renderJSON(result.get(0));
-			
-			
 			
 			for (int i=0; i<result.size(); i++)
 			{
-				//result.get(i).;
 				jsonArray.add(result.get(i));
-				//result.get
 			}
 			
 			renderJSON(jsonArray.toString());
-			/*
-			//resultJson.
-			//jsonArray.
-			
-			renderJSON(jsonArray);
-			*/
 		}
 		catch (Exception ex){
 			System.out.println(ex.toString());
