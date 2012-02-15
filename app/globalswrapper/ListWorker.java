@@ -34,7 +34,7 @@ public class ListWorker {
 		
 		Long key = (long)0;
 		
-		//FilterApplicator applicator = new FilterApplicator(condition);
+		FilterApplicator applicator = new FilterApplicator(ProjectId, TableName, condition);
 		
 		while (true)
 		{
@@ -45,10 +45,10 @@ public class ListWorker {
 			String nodeValue = node.getObject(key, "JSON").toString();
 			JsonObject obj = new JsonParser().parse(nodeValue).getAsJsonObject();
 			list.add(obj);
-			/*if (applicator.IsFiltered(obj))
+			if (applicator.IsFiltered(obj))
 			{
 				list.add(obj);
-			}*/
+			}
 		}
 		
 		return list;

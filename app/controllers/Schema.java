@@ -18,8 +18,11 @@ public class Schema extends BaseController {
 		render(project_id);
 	}
 	
+	public static void show(long project_id) {
+		render(project_id);
+	}
+	
 	public static void create(JsonObject body) {
-		System.out.println(body.toString());
 		SchemaManager mr = new SchemaManager();
 		Long projectId = body.get("project_id").getAsLong();
 		
@@ -44,7 +47,10 @@ public class Schema extends BaseController {
 		renderJSON("[]");
 	}
 
-	public static void read(){
-		
+	public static void read(long project_id){
+		System.out.println("proj" + project_id);
+		SchemaManager mr = SchemaManager.Instance();
+		JsonObject body = mr.ReadSchema(project_id);		
+		renderJSON(body.toString());	
 	}
 }

@@ -2,7 +2,7 @@ package globalswrapper;
 
 import com.google.gson.JsonObject;
 
-public class FilterManager {
+public class FilterConverter {
 
 	public FilterCondition Filter = null;
 	public SortCondition Sort = null;
@@ -12,9 +12,9 @@ public class FilterManager {
 	public static String Sort_Type = "sort";
 	public static String PageInfo_Type = "pageInfo";
 	
-	public static FilterManager Instance(Long projectId, String tableName, JsonObject object)
+	public static FilterConverter Instance(Long projectId, String tableName, JsonObject object)
 	{
-		FilterManager manager = new FilterManager();
+		FilterConverter manager = new FilterConverter();
 		
 		if (object.has(Filter_Type)){
 			manager.Filter = FilterCondition.getFromJsonObject(projectId, tableName, object.get(Filter_Type).getAsJsonObject());

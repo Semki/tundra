@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import globalswrapper.CRUDManager;
 import globalswrapper.FilterCondition;
-import globalswrapper.FilterManager;
+import globalswrapper.FilterConverter;
 import globalswrapper.ListWorker;
 import globalswrapper.SchemaManager;
 import globalswrapper.SortCondition;
@@ -23,9 +23,17 @@ public class CRUD extends BaseController{
 	{
 		try {
 			
+			object = new JsonObject();
+			/*JsonObject sort = new JsonObject();
+			sort.addProperty("fieldName", "post_id");
+			sort.addProperty("order", "desc");
+			
+			object.add("sort", sort);
+			*/
+			
 			JsonArray jsonArray = new JsonArray(); 
 			ListWorker listWorker = new ListWorker(projectId, tableName);
-			FilterManager filterManager = FilterManager.Instance(projectId, tableName, object); 
+			FilterConverter filterManager = FilterConverter.Instance(projectId, tableName, object); 
 		
 			ArrayList<JsonObject> result = listWorker.GetList(filterManager.Filter, filterManager.Sort, filterManager.Page);
 
