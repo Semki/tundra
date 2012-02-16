@@ -81,6 +81,10 @@
           })
         });
         
+        $('#refresh_posts_btn').click(function(){
+          RefreshPosts();
+        });
+        
         $(document).delegate(".post_delete", "click", function(){
           var postId = $(this).attr("post_id");
           Post.deleteId(postId, function(){
@@ -100,7 +104,7 @@
         
         $('#search_btn').click(function(){
           var searchText = $('#search_text').val();
-          var t = Post.where('content','contains',searchText).getObjects(function(posts){
+          Post.where('content','contains',searchText).getObjects(function(posts){
             RedrawPosts(posts);
           });
         });
