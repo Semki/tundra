@@ -104,7 +104,7 @@
         
         $('#search_btn').click(function(){
           var searchText = $('#search_text').val();
-          var t = Post.where('content','contains',searchText).getObjects(function(posts){
+          Post.where('content','contains',searchText).getObjects(function(posts){
             RedrawPosts(posts);
           });
         });
