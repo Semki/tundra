@@ -21,13 +21,11 @@ POST /objects/{projectId}/{tableName}		    CRUD.create
 
 DELETE /objects/{projectId}/{tableName}/{id}	CRUD.delete
 
-GET /schema/new_scheme/{project_id}				Schema.new_scheme
-
 POST /schema/create								Schema.create
 
 GET /schema/read/{project_id}					Schema.read
 
-GET /schema/show/{project_id}					Schema.show
+GET /schema/{project_id}						Schema.form
 
 # Catch all
 *       /{controller}/{action}               {controller}.{action}

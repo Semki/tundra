@@ -12,21 +12,6 @@ import com.sun.corba.se.spi.activation.Server;
 import play.mvc.Controller;
 
 public class Schema extends BaseController {
-	
-	public static void index() {
-		
-		System.out.println(request);
-		render();
-	}
-	
-	public static void new_scheme(long project_id) {
-		render(project_id);
-	}
-	
-	public static void show(long project_id) {
-		render(project_id);
-	}
-	
 	public static void create(JsonObject body) {
 		SchemaManager mr = new SchemaManager();
 		Long projectId = body.get("project_id").getAsLong();
@@ -60,9 +45,15 @@ public class Schema extends BaseController {
 		renderJSON(url);
 	}
 
-	public static void read(Long projectId){
+	public static void read(long project_id){
 		SchemaManager mr = SchemaManager.Instance();
-		JsonObject body = mr.ReadSchema(projectId);		
+		JsonObject body = mr.ReadSchema(project_id);		
 		renderJSON(body.toString());	
 	}
+	
+	public static void form(long project_id) {
+		System.out.println("pr id:" + project_id);
+		render(project_id);
+	}
+	
 }
