@@ -41,7 +41,7 @@ $(document).ready(function () {
 			scheme.tables.push(table);
 		});
 		
-		alert(JSON.stringify(scheme));
+		//alert(JSON.stringify(scheme));
 		return scheme;
 	};
 	
