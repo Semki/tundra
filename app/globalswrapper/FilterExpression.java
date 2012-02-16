@@ -35,6 +35,7 @@ public class FilterExpression {
 	
 	public Boolean IsValid(JsonObject record)
 	{
+		System.out.println("conditions = "+conditions);
 		if (conditions == null)
 			return true;
 
@@ -42,7 +43,7 @@ public class FilterExpression {
 		for (int i=0;i<conditions.size(); i++)
 		{
 			FilterCondition condition = conditions.get(i);
-
+			System.out.println("condition = "+condition);
 			conditionIsValid = condition.IsValid(record);
 			if (condition.IsNegative)
 				conditionIsValid = !conditionIsValid;

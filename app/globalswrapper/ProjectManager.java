@@ -27,7 +27,10 @@ public class ProjectManager {
 		//System.out.println("projectInfo");
 		//System.out.println(projectInfo);
 		if (projectInfo == null)
+		{
+			System.out.println("Null project info applied.");
 			return null;
+		}
 		
 		if (projectInfo.has(PROJECT_NAME))
 		{

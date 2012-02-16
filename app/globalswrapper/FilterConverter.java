@@ -18,6 +18,12 @@ public class FilterConverter {
 		
 		if (object.has(Filter_Type)){
 			manager.Filter = FilterExpression.getFromJsonObject(projectId, tableName, object.get(Filter_Type).getAsJsonArray());
+			System.out.println("Filter Is "+manager.Filter );
+		}
+		else
+		{
+			System.out.println("Object has not Filter_Type");
+			
 		}
 		if (object.has(Sort_Type)){
 			manager.Sort = SortCondition.getFromJsonObject(projectId, tableName, object.get(Sort_Type).getAsJsonObject());

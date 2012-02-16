@@ -32,9 +32,11 @@ public class FilterCondition {
 	public Boolean IsValid(JsonObject record)
 	{
 		JsonElement nodeValue = record.get(FieldName);
+		System.out.println("DataType = "+DataType);
 		switch (DataType)
 		{
 			case STRING_TYPE: 
+					System.out.println("Gotcha DataType = "+DataType);
 					return ApplyStringFilter(nodeValue.getAsString());
 			case DATE_TYPE: Date date = DataTypesHelper.StringToDate(nodeValue.getAsString());
 					return ApplyDateFilter(date);
@@ -109,8 +111,13 @@ public class FilterCondition {
 			return StringIsEqual(nodeValue);
 		}
 		
-		if (CondType.toString() == ConditionType.CONTAINS)
+		System.out.println("CondType =   "+CondType);
+		if (CondType.equalsIgnoreCase(ConditionType.CONTAINS))
 		{
+			System.out.println("Gotcha CONTAINS  ");
+			
+			Boolean res = StringContains(nodeValue);
+			System.out.println("ConditionType.CONTAINS, nodeValue = "+nodeValue+ "' result is "+res);
 			return StringContains(nodeValue);
 		}
 		return false;

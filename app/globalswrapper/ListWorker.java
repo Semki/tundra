@@ -44,10 +44,17 @@ public class ListWorker {
 			key = Long.parseLong(strKey);
 			String nodeValue = node.getObject(key, "JSON").toString();
 			JsonObject obj = new JsonParser().parse(nodeValue).getAsJsonObject();
-			list.add(obj);
-			if (expression.IsValid(obj))
+			
+			if (expression != null)
 			{
-				list.add(obj);
+				if (expression.IsValid(obj))
+				{
+					list.add(obj);
+				}
+			}
+			else
+			{
+				System.out.println("We have a problem: null expression");
 			}
 		}
 		
