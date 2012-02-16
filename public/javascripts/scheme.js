@@ -31,11 +31,9 @@ $(document).ready(function () {
 			table.table_name = $(this).children("h3").text();
 			table.columns = [];
 			
-			$.each($('.table_column_name_' + table.table_name), function () {
-				var column = {};
-				column.column_name = $(this).text();
-				column.type = "string";
-				table.columns.push(column);
+			$.each($('.column_row_' + table.table_name), function () {
+				table.columns.push({column_name: $(this).children('.table_column_name').text(),
+					                type: $(this).children('.table_column_type').text()});
 			});
 			
 			scheme.tables.push(table);
@@ -101,7 +99,7 @@ $(document).ready(function () {
 			
 			var column = {};
 			column.column_name = columnName;
-			column.type = "string";
+			column.type = $('#column_type_select_' + table_name + ' option:selected').val();
 			
 			addColumn(table_name, column);
 		}
@@ -138,6 +136,12 @@ $(document).ready(function () {
 		table_html += '<tr><th>Column name</th><th>Data type</th><th></th></tr>';
 		table_html += '</thead></table>';
 		table_html += '<input id="column_name_tb_' + table_name + '" class="col_3 column_name_tb" type="text" placeholder="Column name"></input>';
+		table_html += '<select class="column_type_select" id="column_type_select_' + table_name + '">' +
+	                  '<option value="string">String</option>' +
+	                  '<option value="integer">Integer</option>' +
+	                  '<option value="boolean">Boolean</option>' +
+	                  '<option value="date">Date</option>' +
+	                  '</select>';
 		table_html += '<button class="small add_column" id="add_column_' + table_name + '"><span class="icon"><span aria-hidden="true">+</span></span>Add column</button>';
 		table_html += '</div>';
 		
@@ -154,8 +158,8 @@ $(document).ready(function () {
 	var addColumn = function(table_name, column) {
 		var column_name = column.column_name;
 		var column_datatype = column.type;
-		var column_html = '<tr>';
-		column_html += '<td class="table_column_name_' + table_name + '">' + column_name + '</td><td>' + column_datatype + '</td>';
+		var column_html = '<tr class="column_row_' + table_name + '">';
+		column_html += '<td class="table_column_name">' + column_name + '</td><td class="table_column_type">' + column_datatype + '</td>';
 		column_html += '<td><span class="icon gray remove_column"><span aria-hidden="true">X</span></span></td>';
 		column_html += '</tr>';
 		
