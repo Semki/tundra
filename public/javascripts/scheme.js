@@ -49,6 +49,20 @@ $(document).ready(function () {
 	var parseScheme = function(scheme) {
 		project_id = scheme.project_id;
 		
+		if (scheme.tables.length > 0){
+			$('#links_wrapper').show(100);
+		}	
+		
+		$('#views_url').text(scheme.views_url);
+		$('#views_url').attr('href', scheme.views_url);
+		
+		$('#models_url').text(scheme.models_url);
+		$('#models_url').attr('href', scheme.models_url);
+		
+		$('#html_url').text(scheme.html_url);
+		$('#html_url').attr('href', scheme.html_url);
+		
+		
 		$.each(scheme.tables, function () {
 			addTable(this);
 		});
