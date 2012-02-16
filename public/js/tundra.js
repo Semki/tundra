@@ -97,7 +97,7 @@ TQueryObject.prototype.conditionsToTransport = function() {
     var transport = new Object();
   
     
-    transport.filter = this.conditions[this.conditions.length-1];
+    transport.filter = this.conditions;
     
     return transport;
 };
