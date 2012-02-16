@@ -9,3 +9,7 @@
 .table_header {
 	display: inline;
 }
+
+#project_id {
+	display: none;
+}
