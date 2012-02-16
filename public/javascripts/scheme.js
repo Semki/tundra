@@ -105,7 +105,16 @@ $(document).ready(function () {
 			
 			addColumn(table_name, column);
 		}
-
+	});
+	
+	// Remove column click handler
+	$('.remove_column').live('click', function () {
+		$(this).parent().parent().remove();
+	});
+	
+	// Remove table click handler
+	$('.remove_table').live('click', function () {
+		$(this).parent().remove();
 	});
 	
 	// Action button click handler
@@ -122,10 +131,11 @@ $(document).ready(function () {
 		var table_name = table.table_name;
 		var table_html = "";
 		
-		table_html += '<div class="table_wrapper" id="table_wrapper_' + table_name +'">';
-		table_html += '<h3>' + table_name + '</h3>';
+		table_html += '<div class="table_wrapper" id="table_wrapper_' + table_name +'"><br />';
+		table_html += '<h3 class="table_header">' + table_name + '</h3>';
+		table_html += '<span class="icon gray remove_table"><span aria-hidden="true">X</span></span>';
 		table_html += '<table class="table_table" id="table_table_' + table_name + '"><thead>';
-		table_html += '<tr><th>Column name</th><th>Data type</th><th>x</th></tr>';
+		table_html += '<tr><th>Column name</th><th>Data type</th><th></th></tr>';
 		table_html += '</thead></table>';
 		table_html += '<input id="column_name_tb_' + table_name + '" class="col_3 column_name_tb" type="text" placeholder="Column name"></input>';
 		table_html += '<button class="small add_column" id="add_column_' + table_name + '"><span class="icon"><span aria-hidden="true">+</span></span>Add column</button>';
@@ -145,7 +155,8 @@ $(document).ready(function () {
 		var column_name = column.column_name;
 		var column_datatype = column.type;
 		var column_html = '<tr>';
-		column_html += '<td class="table_column_name_' + table_name + '">' + column_name + '</td><td>' + column_datatype + '</td><td></td>';
+		column_html += '<td class="table_column_name_' + table_name + '">' + column_name + '</td><td>' + column_datatype + '</td>';
+		column_html += '<td><span class="icon gray remove_column"><span aria-hidden="true">X</span></span></td>';
 		column_html += '</tr>';
 		
 		$('#table_table_' + table_name).append(column_html);
