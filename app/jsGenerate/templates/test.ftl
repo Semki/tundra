@@ -29,6 +29,10 @@ tundraProjectId = ${project_id};
    	${table.table_name}.where = function(field, predicate, value) {
     	return TActiveRecord.where(this, field, predicate, value);
   	}
+  	
+  	${table.table_name}.order = function(field, order) {
+      return TActiveRecord.order(this, field, order);
+    }
   
   	
 </#list>
