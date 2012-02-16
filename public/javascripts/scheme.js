@@ -32,13 +32,16 @@ $(document).ready(function () {
 			table.columns = [];
 			
 			$.each($('.column_row_' + table.table_name), function () {
+				var hasIndex = 
 				table.columns.push({column_name: $(this).children('.table_column_name').text(),
-					                type: $(this).children('.table_column_type').text()});
+					                type: $(this).children('.table_column_type').text(),
+					                has_index: ($(this).children('.has_index').text() == "yes")});
 			});
 			
 			scheme.tables.push(table);
 		});
 		
+		alert(JSON.stringify(scheme));
 		return scheme;
 	};
 	
@@ -56,7 +59,7 @@ $(document).ready(function () {
 		$("#actions_wrapper").empty();
 		
 		
-		var button_html = '<br/>';
+		var button_html = '<br/><hr />';
 		button_html += '<input id="table_name" type="text" class="col_3" placeholder="Table name" />';
 		button_html += '<button id="create_table" class="medium blue"><span class="icon"><span aria-hidden="true">+</span></span>Create table</button>';
 		button_html += '<button class="medium green" id="generate_scheme"><span class="icon"><span aria-hidden="true">F</span></span>';
@@ -100,6 +103,7 @@ $(document).ready(function () {
 			var column = {};
 			column.column_name = columnName;
 			column.type = $('#column_type_select_' + table_name + ' option:selected').val();
+			column.has_index = $('#index_flag_' + table_name).is(':checked');
 			
 			addColumn(table_name, column);
 		}
@@ -129,11 +133,11 @@ $(document).ready(function () {
 		var table_name = table.table_name;
 		var table_html = "";
 		
-		table_html += '<div class="table_wrapper" id="table_wrapper_' + table_name +'"><br />';
+		table_html += '<div class="table_wrapper" id="table_wrapper_' + table_name +'"><hr />';
 		table_html += '<h3 class="table_header">' + table_name + '</h3>';
 		table_html += '<span class="icon gray remove_table"><span aria-hidden="true">X</span></span>';
 		table_html += '<table class="table_table" id="table_table_' + table_name + '"><thead>';
-		table_html += '<tr><th>Column name</th><th>Data type</th><th></th></tr>';
+		table_html += '<tr><th>Column name</th><th>Data type</th><th>Has index?</th><th></th></tr>';
 		table_html += '</thead></table>';
 		table_html += '<input id="column_name_tb_' + table_name + '" class="col_3 column_name_tb" type="text" placeholder="Column name"></input>';
 		table_html += '<select class="column_type_select" id="column_type_select_' + table_name + '">' +
@@ -142,8 +146,9 @@ $(document).ready(function () {
 	                  '<option value="boolean">Boolean</option>' +
 	                  '<option value="date">Date</option>' +
 	                  '</select>';
+		table_html += '<input type="checkbox" class="index_flag" id="index_flag_' + table_name + '" style="margin: 16px 0 0px 0;" /> <label for="index_flag_' + table_name + '" class="inline">Has index? </label>';
 		table_html += '<button class="small add_column" id="add_column_' + table_name + '"><span class="icon"><span aria-hidden="true">+</span></span>Add column</button>';
-		table_html += '</div>';
+		table_html += '<br /></div>';
 		
 		$("#tables_wrapper").append(table_html);
 		
@@ -160,6 +165,11 @@ $(document).ready(function () {
 		var column_datatype = column.type;
 		var column_html = '<tr class="column_row_' + table_name + '">';
 		column_html += '<td class="table_column_name">' + column_name + '</td><td class="table_column_type">' + column_datatype + '</td>';
+		column_html += '<td class="has_index">';
+		if (column.has_index == true) {
+			column_html += "yes";
+		}
+		column_html += '</td>';
 		column_html += '<td><span class="icon gray remove_column"><span aria-hidden="true">X</span></span></td>';
 		column_html += '</tr>';
 		
