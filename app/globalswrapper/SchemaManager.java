@@ -78,6 +78,12 @@ public class SchemaManager {
 
 		return FieldType.STRING_TYPE.getTypeValue();
 	}
+	
+	public FieldType GetFieldTypeAsEnum(Long projectId, String tableName,
+			String fieldName) {
+		
+		return FieldType.getType(GetFieldType(projectId, tableName, fieldName));
+	}
 
 	private JsonObject GetColumnInfo(JsonObject table, String columnName) {
 		JsonArray columns = GetColumns(table);

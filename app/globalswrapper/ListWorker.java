@@ -17,15 +17,15 @@ public class ListWorker {
 		TableName = tableName;
 	}
 	
-	public ArrayList<JsonObject> GetList(FilterCondition condition, SortCondition sort, PageInfo requiredPage)
+	public ArrayList<JsonObject> GetList(FilterExpression expression, SortCondition sort, PageInfo requiredPage)
 	{
-		ArrayList<JsonObject> list = ApplyFilter(condition);
+		ArrayList<JsonObject> list = ApplyFilter(expression);
 		list = SortItems(list, sort);
 		list = PaginateItems(list, requiredPage);
 		return list;
 	}
 	
-	public ArrayList<JsonObject> ApplyFilter(FilterCondition condition)
+	public ArrayList<JsonObject> ApplyFilter(FilterExpression expression)
 	{
 		ArrayList<JsonObject> list = new ArrayList<JsonObject>();
 		
@@ -34,8 +34,8 @@ public class ListWorker {
 		
 		Long key = (long)0;
 		
-		FilterApplicator applicator = new FilterApplicator(ProjectId, TableName, condition);
-		
+		//FilterApplicator applicator = new FilterApplicator(ProjectId, TableName, condition);
+		//FilterExpression expression = new FilterExpression(conditions, projectId)
 		while (true)
 		{
 			String strKey = node.nextSubscript(key);
@@ -45,7 +45,7 @@ public class ListWorker {
 			String nodeValue = node.getObject(key, "JSON").toString();
 			JsonObject obj = new JsonParser().parse(nodeValue).getAsJsonObject();
 			list.add(obj);
-			if (applicator.IsFiltered(obj))
+			if (expression.IsValid(obj))
 			{
 				list.add(obj);
 			}
