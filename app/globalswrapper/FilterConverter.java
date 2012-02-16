@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 
 public class FilterConverter {
 
-	public FilterCondition Filter = null;
+	public FilterExpression Filter = null;
 	public SortCondition Sort = null;
 	public PageInfo Page = null;
 	
@@ -17,7 +17,7 @@ public class FilterConverter {
 		FilterConverter manager = new FilterConverter();
 		
 		if (object.has(Filter_Type)){
-			manager.Filter = FilterCondition.getFromJsonObject(projectId, tableName, object.get(Filter_Type).getAsJsonObject());
+			manager.Filter = FilterExpression.getFromJsonObject(projectId, tableName, object.get(Filter_Type).getAsJsonArray());
 		}
 		if (object.has(Sort_Type)){
 			manager.Sort = SortCondition.getFromJsonObject(projectId, tableName, object.get(Sort_Type).getAsJsonObject());

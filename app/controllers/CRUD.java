@@ -21,17 +21,16 @@ public class CRUD extends BaseController{
 	// TODO: conditions
 	public static void list(Long projectId, String tableName, JsonObject jsonParam)
 	{
+
 		try {
 			
 			if (jsonParam==null)
 			{
 				jsonParam = new JsonObject();
 			}
-				
-			System.out.println(jsonParam.toString());
-			
 			JsonArray jsonArray = new JsonArray(); 
 			ListWorker listWorker = new ListWorker(projectId, tableName);
+			
 			FilterConverter filterManager = FilterConverter.Instance(projectId, tableName, jsonParam); 
 		
 			ArrayList<JsonObject> result = listWorker.GetList(filterManager.Filter, filterManager.Sort, filterManager.Page);
