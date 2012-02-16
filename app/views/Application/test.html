@@ -67,7 +67,7 @@
         }
         
         RefreshPosts = function(){
-          Post.getAll(function(posts){
+          Post.order("Id","desc").getObjects(function(posts){
             RedrawPosts(posts);
           });
         };
@@ -79,6 +79,10 @@
           post.save(function(){
             RefreshPosts();
           })
+        });
+        
+        $('#refresh_posts_btn').click(function(){
+          RefreshPosts();
         });
         
         $(document).delegate(".post_delete", "click", function(){
@@ -100,7 +104,7 @@
         
         $('#search_btn').click(function(){
           var searchText = $('#search_text').val();
-          var t = Post.where('content','contains',searchText).getObjects(function(posts){
+          Post.where('content','contains',searchText).order("Id","desc").getObjects(function(posts){
             RedrawPosts(posts);
           });
         });
