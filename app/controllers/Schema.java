@@ -68,24 +68,11 @@ public class Schema extends BaseController {
 	private static String getServerUrl() {
 		String result = "";
 		try {
-			InetAddress addr = InetAddress.getLocalHost();
-			String port = request.port.toString();
-			String hostname = getIpAsString(addr);
-			result = hostname + ":" + port;
+			result = request.host;
 		}
 		catch (Exception e) {
 			System.out.println(e.toString());
 		}
 		return result;
-	}
-	
-	private static String getIpAsString(InetAddress address) {
-		byte[] ipAddress = address.getAddress();
-		StringBuffer str = new StringBuffer();
-		for(int i=0; i<ipAddress.length; i++) {
-			if(i > 0) str.append('.');
-			str.append(ipAddress[i] & 0xFF);				
-		}
-		return str.toString();
 	}
 }
