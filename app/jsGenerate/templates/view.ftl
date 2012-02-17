@@ -30,6 +30,7 @@ ${table.table_name}View.renderList = function(objects){
 }
 
 ${table.table_name}View.renderEdit = function(object){
+	var result = "";
 <#list table.columns as column>
 	var result = result + "<label>${column.column_name}</label>";
 	result = result + "<input type='text' id='${table.table_name}_${column.column_name}_input' value='" + object.${column.column_name} +"' /><br />";
@@ -40,6 +41,7 @@ ${table.table_name}View.renderEdit = function(object){
 }
 
 ${table.table_name}View.renderNew = function(){
+	var result = "";
 <#list table.columns as column>
 	var result = result + "<label>${column.column_name}</label>";
 	result = result + "<input type='text' id='${table.table_name}_${column.column_name}_input'  /><br />";

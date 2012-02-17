@@ -41,9 +41,9 @@
         /* Create {t.table_name} */
         $(document).delegate("#${t.table_name}_create_btn", "click", function(){
             object = new ${t.table_name}();
-            object.title = $('#${t.table_name}_title_input').val();
-            object.content = $('#${t.table_name}_content_input').val();
-            object.date_create = $('#${t.table_name}_date_create_input').val();      
+          <#list t.columns as c>
+            object.${c.column_name} = $('#${t.table_name}_${c.column_name}_input').val();
+          </#list>     
             object.save(function(){
               Refresh${t.table_name}Objects();
             })
@@ -71,17 +71,17 @@
         $(document).delegate(".${t.table_name}_update_btn", "click", function(){
           var objectId = $(this).attr("object_id");
           ${t.table_name}.open(objectId,function(object){
-            object.title = $('#${t.table_name}_title_input').val();
-            object.content = $('#${t.table_name}_content_input').val();
-            object.date_create = $('#${t.table_name}_date_create_input').val();   
+          
+          <#list t.columns as c>
+            object.${c.column_name} = $('#${t.table_name}_${c.column_name}_input').val();
+          </#list>
             object.save(function(){
               Refresh${t.table_name}Objects();
             })
           });
         });
   </#list>
-        /* Let's go */      
-        //RefreshObjects();
+
         
       });
         

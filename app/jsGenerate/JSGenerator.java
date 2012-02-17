@@ -46,12 +46,10 @@ public class JSGenerator {
 	}
 	
 	
-	public String GenerateModelJs(String hostname, String port) throws IOException, TemplateException
+	public String GenerateModelJs() throws IOException, TemplateException
 	{
 		Template template = templateConfig.getTemplate("model.ftl");
 	
-		map.put("hostname", hostname);
-		map.put("port", port);
 		
 		String path = System.getProperty("application.path");
 		String fileName =  "/public/js/models/models"+projectId+".js";
