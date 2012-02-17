@@ -78,9 +78,9 @@ $(document).ready(function () {
 		button_html += '<button id="create_table" class="medium blue"><span class="icon"><span aria-hidden="true">+</span></span>Create table</button>';
 		button_html += '<button class="medium green" id="generate_scheme"><span class="icon"><span aria-hidden="true">F</span></span>';
 		if (is_creating == true) {
-			button_html += 'Generate scheme</button>';
+			button_html += 'Generate schema</button>';
 		} else {
-			button_html += 'Modify scheme</button>';
+			button_html += 'Modify schema</button>';
 		}
 		
 		$("#actions_wrapper").append(button_html);
