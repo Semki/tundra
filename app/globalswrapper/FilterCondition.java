@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 public class FilterCondition {
 	
 	public Boolean IsIndexed;
-	public Boolean IsNegative;
+	public Boolean IsNegative = false;
 	public String FieldName;
 	public FieldType DataType;
 	public String TableName;

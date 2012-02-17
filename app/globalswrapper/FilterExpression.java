@@ -31,16 +31,22 @@ public class FilterExpression {
 	private void FillDataTypesInfo(Long projectId)
 	{
 		IndexedCondtionsByFieldName = new HashMap<String, ArrayList<FilterCondition>>();
+		
 		if (conditions == null)
 			return;
 		notIndexedConditions = new ArrayList<FilterCondition>();
 		for (int i=0;i<conditions.size(); i++)
 		{
 			FilterCondition condition = conditions.get(i);
+			
+			System.out.println("is null condition? = "+condition);
 			JsonObject column = SchemaManager.Instance().GetColumnByProjectIdAndTableName(projectId, condition.TableName, condition.FieldName);
+			System.out.println("is null column ? = "+column);
 			if (column != null)
 			{
+				System.out.println("column = "+column);
 				condition.DataType =  FieldType.getType(column.get(SchemaManager.DATA_TYPE).getAsString());
+				System.out.println("condition.DataType = "+condition.DataType);
 				condition.IsIndexed =  SchemaManager.IsColumnIndexed(column);
 				if (condition.IsIndexed && condition.ConditionTypeIsAppropriateForIndexing())
 				{
@@ -67,10 +73,10 @@ public class FilterExpression {
 		ArrayList<FilterCondition> byname = IndexedCondtionsByFieldName.get(condition.FieldName);
 		if (byname == null)
 		{
-			byname = new ArrayList<FilterCondition> ();
-			
+			byname = new ArrayList<FilterCondition>();
 		}
 		byname.add(condition);
+		IndexedCondtionsByFieldName.put(condition.FieldName, byname);
 	}
 	
 	
@@ -90,7 +96,9 @@ public class FilterExpression {
 				System.out.println("condition = "+condition);
 				conditionIsValid = condition.IsValid(record);
 				if (condition.IsNegative)
+				{
 					conditionIsValid = !conditionIsValid;
+				}
 			
 				if (!conditionIsValid)
 				{

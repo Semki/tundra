@@ -180,6 +180,8 @@ public class ListWorker {
 			}
 			else
 			{
+				System.out.println("expression = "+expression);
+				System.out.println("obj = "+obj);
 				if (expression.IsValid(obj))
 				{
 					list.add(obj);
