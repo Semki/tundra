@@ -38,7 +38,7 @@
             $('#content').html(${t.table_name}View.renderNew());
         });
         
-        /* Create {t.table_name} */
+        /* Create ${t.table_name} */
         $(document).delegate("#${t.table_name}_create_btn", "click", function(){
             object = new ${t.table_name}();
           <#list t.columns as c>
@@ -49,7 +49,7 @@
             })
         });
         
-        /* Delete {t.table_name} */
+        /* Delete ${t.table_name} */
         $(document).delegate(".${t.table_name}_delete_btn", "click", function(){
           var objectId = $(this).attr("object_id");
           ${t.table_name}.deleteId(objectId, function(){
@@ -58,7 +58,7 @@
           });
         });
         
-        /* Edit {t.table_name} */
+        /* Edit ${t.table_name} */
         $(document).delegate(".${t.table_name}_edit_btn", "click", function(){
           var objectId = $(this).attr("object_id");
           ${t.table_name}.open(objectId,function(object){
@@ -67,7 +67,7 @@
           });
         });
         
-        /* Update {t.table_name} */
+        /* Update ${t.table_name} */
         $(document).delegate(".${t.table_name}_update_btn", "click", function(){
           var objectId = $(this).attr("object_id");
           ${t.table_name}.open(objectId,function(object){
