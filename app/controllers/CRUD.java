@@ -16,14 +16,22 @@ import com.google.gson.JsonObject;
 import play.mvc.Controller;
 import play.mvc.Http.StatusCode;
 import play.mvc.results.Error;
+import play.mvc.Before;
 
 public class CRUD extends BaseController{
-
+	
+	@Before
+    private static void setAllowHeader() {
+           
+		response.setHeader("Access-Control-Allow-Origin", "*");
+		response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE");
+		response.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Requested-With");
+    }
+	
 	// TODO: conditions
 	public static void list(Long projectId, String tableName, JsonObject jsonParam)
 	{
-		try {
-		
+		try {		
 			if (jsonParam==null){
 				jsonParam = new JsonObject();
 			}
@@ -91,8 +99,9 @@ public class CRUD extends BaseController{
 	}
 	
 	public static void update(Long projectId, String tableName, JsonObject body)
-	{	
+	{
 		try{
+			
 			CRUDManager manager = CRUDManager.Instance();
 			manager.Update(projectId, tableName, body);
 			ok();
@@ -100,5 +109,10 @@ public class CRUD extends BaseController{
 			ex.printStackTrace();
 			internalError();
 		}
+	}
+	
+	public static void options()
+	{
+		ok();
 	}
 }

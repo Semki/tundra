@@ -68,10 +68,7 @@ public class Schema extends BaseController {
 	private static String getServerUrl() {
 		String result = "";
 		try {
-			InetAddress addr = InetAddress.getLocalHost();
-			String port = request.port.toString();
-			String hostname = addr.getHostAddress();
-			result = hostname + ":" + port;
+			result = request.host;
 		}
 		catch (Exception e) {
 			System.out.println(e.toString());

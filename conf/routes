@@ -19,6 +19,8 @@ GET /objects/{projectId}/{tableName}        	CRUD.list
 
 POST /objects/{projectId}/{tableName}		    CRUD.create
 
+OPTIONS /objects/{projectId}/{tableName}/{id}	CRUD.options
+
 DELETE /objects/{projectId}/{tableName}/{id}	CRUD.delete
 
 PUT /objects/{projectId}/{tableName}/{id}		CRUD.update
