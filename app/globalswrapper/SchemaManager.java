@@ -197,4 +197,20 @@ public class SchemaManager {
 		return object;
 
 	}
+	
+	public static String GetGlobalDataByTableNameAndProjectId(String tableName, Long projectId)
+	{
+		tableName = tableName + SchemaManager.Instance().GetProjectPrefix(projectId);
+		String globalName = Utils.TableNameToGlobalsName(tableName);
+		return globalName;
+	}
+	
+	public static String GetGlobalIndexByTableNameAndProjectId(String tableName, Long projectId)
+	{
+		tableName = tableName + SchemaManager.Instance().GetProjectPrefix(projectId);
+		String globalName = Utils.TableNameToGlobalsIndexName(tableName);
+		return globalName;
+	}
+    
+    
 }

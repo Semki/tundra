@@ -50,12 +50,16 @@ public class Schema extends BaseController {
 			System.out.println(e.toString());
 		}
 		
+		
 		renderJSON(url);
 	}
 
 	public static void read(long project_id){
 		SchemaManager mr = SchemaManager.Instance();
-		JsonObject body = mr.ReadSchema(project_id);		
+		JsonObject body = mr.ReadSchema(project_id);
+		body.addProperty("models_url", "http://oboobs.ru/");
+		body.addProperty("views_url", "http://demotivation.me/");
+		body.addProperty("html_url", "http://putin2012.ru/");
 		renderJSON(body.toString());	
 	}
 	

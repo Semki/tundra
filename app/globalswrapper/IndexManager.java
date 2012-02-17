@@ -1,53 +1,150 @@
 package globalswrapper;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
+import globalswrapper.*;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.intersys.globals.NodeReference;
 
 
 public class IndexManager {
 	
-	JsonObject TableInfo;
-	Long ProjectId;
+	private JsonObject TableInfo;
+	private String TableName;
+	private ArrayList<String> IndexedColumnNames;
+	private Long ProjectId;
 	
-	public IndexManager(JsonObject _tableInfo, Long projectId)
+	public IndexManager(String tableName, Long projectId)
 	{
-		TableInfo = _tableInfo;
+		
+		TableInfo = SchemaManager.Instance().ReadTable(tableName, projectId);
+		TableName = TableInfo.get(SchemaManager.TABLE_NAME).getAsString();
 		this.ProjectId = projectId;
+		
+		
+		FillIndexedColumnNamesFromTableInfo();
 	}
 
-	public void OnCreateRecord(JsonObject newRecord)
+	private static String IS_INDEXED_FIELD = "has_index"; 
+	private void FillIndexedColumnNamesFromTableInfo()
+	{
+		IndexedColumnNames = new ArrayList<String>();
+		JsonArray columns = TableInfo.getAsJsonArray(SchemaManager.COLUMNS_NAME);
+		
+		
+		for (int i=0; i<columns.size(); i++)
+		{
+			JsonObject column = columns.get(i).getAsJsonObject();
+			if (column.has(IS_INDEXED_FIELD) && (column.get(IS_INDEXED_FIELD).getAsBoolean() == true))
+			{
+				if (column.has(SchemaManager.COLUMN_NAME))
+				{
+					IndexedColumnNames.add(column.get(SchemaManager.COLUMN_NAME).getAsString());
+				}
+			}
+		}
+	}
+	
+	public void AfterCreateRecord(JsonObject newRecord)
 	{
 		NodeReference node = GetNode();
-		
-		String fieldName = "";
-		String fieldValue = "";
-		Long Id = newRecord.get("Id").getAsLong();
-		
-		
-		SetIndexValue(node, Id, fieldName, fieldValue);
-		
-		
-		
+		WriteObjectValues(node, newRecord);
 		node.close();
 	}
+	
+	private void WriteObjectValues(NodeReference node, JsonObject record)
+	{
+		UpdateIndexForObject(node, record, true);
+	}
+	
+	private void KillObjectValues(NodeReference node, JsonObject record)
+	{
+		UpdateIndexForObject(node, record, false);
+	}
+	
+	private void UpdateIndexForObject(NodeReference node, JsonObject record, Boolean insertMode)
+	{
+		
+		String fieldName;
+		String fieldValue;
+		if (!record.has("Id"))
+		{
+			return;
+		}
+		
+		Long Id = record.get("Id").getAsLong();
+		for (int i=0; i<IndexedColumnNames.size(); i++)
+		{
+			fieldName = IndexedColumnNames.get(i);
+			//System.out.println("trying to kill fieldName"+fieldName);
+			fieldValue = record.get(fieldName).getAsString();
+			//System.out.println("fieldValue "+fieldValue);
+			
+			if (insertMode)
+			{
+				//System.out.println("SetIndexValue "+fieldValue);
+				SetIndexValue(node, Id, fieldName, fieldValue);
+			}
+			else
+			{
+				//System.out.println("trying to kill");
+				
+				KillIndexValue(node, Id, fieldName, fieldValue);
+			}
+		}
+	}
+	
+	
+	
+	private String ConvertToIndex(String fieldValue)
+	{
+		return " ".concat(fieldValue);
+	}
+	
+	private String ConvertFromIndex(String indexValue)
+	{
+		return indexValue.substring(1);
+	}
+	
 	
 	public void OnUpdateRecord(JsonObject oldRecord, JsonObject newRecord)
 	{
 		NodeReference node = GetNode();
-		
-		
-				
-		
+		RemoveUnchangedIndexValues(oldRecord, newRecord);
+		KillObjectValues(node, oldRecord);
+		WriteObjectValues(node, newRecord);
 		node.close();
 		
 	}
+
+	// some kind of optimization
+	private void RemoveUnchangedIndexValues(JsonObject oldRecord, JsonObject newRecord)
+	{
+		String fieldName;
+		String oldFieldValue;
+		String newFieldValue;
+		
+		int size = IndexedColumnNames.size();
+		for (int i=size-1; i>=0; i--)
+		{
+			fieldName = IndexedColumnNames.get(i);
+			oldFieldValue = oldRecord.get(fieldName).getAsString();
+			newFieldValue = newRecord.get(fieldName).getAsString();
+			
+			if (oldFieldValue.equalsIgnoreCase(newFieldValue))
+			{
+				IndexedColumnNames.remove(i);
+			}
+		}
+	}
 	
-	public void OnDeleteRecord(Long Id)
+	public void BeforeDeletingRecord(JsonObject deletedRecord)
 	{
 		NodeReference node = GetNode();
+		KillObjectValues(node, deletedRecord);
 		node.close();
 	}
 	
@@ -60,115 +157,17 @@ public class IndexManager {
 	
 	public String GetIndexGlobalName()
 	{
-		return "";
+		return SchemaManager.GetGlobalIndexByTableNameAndProjectId(this.TableName, this.ProjectId);
 	}
 	
-	public void SetIndexValue(NodeReference indexNode, Long objectId, String indexFieldName, String object)
+	public void SetIndexValue(NodeReference indexNode, Long objectId, String indexFieldName, String fieldValue)
 	{
-		indexNode.set(object, objectId, indexFieldName);
-		
+		indexNode.set("", indexFieldName, ConvertToIndex(fieldValue), objectId);
 	}
 	
-	public void KillIndexValue(NodeReference indexNode, Long objectId, String indexFieldName, JsonObject object)
+	public void KillIndexValue(NodeReference indexNode, Long objectId, String indexFieldName, String fieldValue)
 	{
-		indexNode.setSubscriptCount(0);
-		indexNode.appendSubscript(indexFieldName);
-		///
-		/// to do - перебор до ключа
-		///indexNode.appendSubscript();
-		
-		
+		indexNode.kill(indexFieldName, ConvertToIndex(fieldValue), objectId);
 	}
-	/*
-    private void UpdateIndexForField(Persistent obj, Field field, Persistent oldObj) 
-    		throws IllegalAccessException
-    {
-    	if (field.getName() == "Id")
-    		return;
-    	
-    	Index indexAnnotation = field.getAnnotation(Index.class);
-    	
-    	if (indexAnnotation == null)
-    		return;
-    	
-    	String indexName = indexAnnotation.IndexName();
-    	
-    	NodeReference node = null;
-        try
-        {
-            String globalName = obj.GetIndexGlobalName();
-            node = connection.createNodeReference(globalName);
-        }
-        catch (Exception ex)
-        {
-           ex.printStackTrace();
-        }
-        
-        if (oldObj != null)
-        {
-        	Object oldVal = field.get(oldObj);
-        	if (oldVal != null)
-        	{
-        		Object val = ConvertValueForIndexing(oldVal);
-	        	if (node.exists(indexName, val, oldObj.Id))
-	        		node.kill(indexName, val, oldObj.Id);
-        	}
-	    }
-        
-        if (obj != null)
-        {
-        	Object newVal = field.get(obj);
-        	if (newVal != null)
-        	{
-        		Object val = ConvertValueForIndexing(newVal);
-        		if (!node.exists(indexName, val, obj.Id))
-        			node.set("", indexName, val, obj.Id);
-        	}
-        }
-    }
-    
-    public static Object ConvertValueForIndexing(Object value)
-    {
-    	if (value instanceof String)
-    	{
-    		//System.out.println(">"+value.toString().toUpperCase()+"<");
-    		
-    		String str = " ".concat(value.toString().toUpperCase());
-    		//System.out.println(">"+str+"<");
-    		if (str.length() > 500)
-    			return str.substring(0, 500);
-    		return str;
-    	}
-    	else if (value instanceof Date)
-    	{
-    		Date val = (Date) value;
-    		return " ".concat(DateHelper.DateToString(val));
-    	}
-    	else
-    	{
-    		return value;
-    	}
-    }
-    
-    
-    
-    public void UpdateIndicesOnUpdate(Persistent oldObj, Persistent obj)
-    {
-    	
-    }
-    
-    public void UpdateIndicesOnDelete(Persistent obj) throws IllegalArgumentException, IllegalAccessException
-    {
-    	String globalName = obj.GetIndexGlobalName();
-        NodeReference node = connection.createNodeReference(globalName);
-        
-    	Field[] fields = obj.getClass().getFields();
-    	for (int i =0; i< fields.length; i++)
-    	{
-    		Field field = fields[i];
-    		Index annotation = field.getAnnotation(Index.class);
-    		if (annotation != null)
-    			node.kill(annotation.IndexName(), ConvertValueForIndexing(field.get(obj).toString()), obj.Id);
-    	}
-    }*/
+	
 }
