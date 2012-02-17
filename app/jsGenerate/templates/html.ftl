@@ -7,16 +7,8 @@
         <script type="text/javascript" src='http://${server_url}/public/js/tundra.js'></script>
         <script type="text/javascript" src='http://${server_url}/public/js/models/models${project_id}.js'></script>
         <script type="text/javascript" src='http://${server_url}/public/js/views/view${project_id}.js'></script>
-    </head>
-    <body>
-      
-    <#list tables as t>
-      <a href='#' class='${t.table_name}_list_btn'>${t.table_name} list</a>
-    </#list>
-    
-      <div id="content">
-      </div>     
-      <script>
+        
+              <script>
  
       $(document).ready(function(){
 <#list tables as t>
@@ -81,11 +73,19 @@
           });
         });
   </#list>
-
-        
+ 
       });
-        
-
     	</script>
+        
+    </head>
+    <body>
+      
+    <#list tables as t>
+      <a href='#' class='${t.table_name}_list_btn'>${t.table_name} list</a>
+    </#list>
+    
+      <div id="content">
+      </div>     
+
     </body>
 </html>
