@@ -2,37 +2,51 @@
 
 <html>
     <head>
+        <head>
         <title>#{get 'title' /}</title>
         <meta charset="${_response_encoding}">
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-        <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->   
-        <script type="text/javascript" src="@{'/public/js/tundra.js'}"></script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>	
+		<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+		<script type="text/javascript" src="@{'/public/js/tundra.js'}"></script>
+		
+		<link rel="stylesheet" type="text/css" href="@{'/public/css/kickstart.css'}" media="all" />
+		<link rel="stylesheet" type="text/css" href="@{'/public/css/style.css'}" media="all" />
         <script type="text/javascript" src="@{'/public/js/models/models1.js'}"></script>
         <link rel="stylesheet" type="text/css" href="/public/css/test.css">
-
+        <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+        
+        <script src="@{'/public/js/jquery-1.6.4.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+        <script type="text/javascript" src="@{'/public/js/prettify.js'}"></script>
+		<script type="text/javascript" src="@{'/public/js/kickstart.js'}"></script>
+        #{get 'moreScripts' /}
     </head>
     <body>
-    
-        <label>Title</label>
-        <input type='text' id='post_title' />
-        <br />
-        
-        <label>Text</label>
-        <textarea id='post_content'></textarea>
-        <br />
-      
-        <input type="button" id="create_post_btn" value="Create Post" />
-        <input type="button" id="refresh_posts_btn" value="Refresh Posts" />
-        
-        <br />
-        <input type="text" id="search_text" />
-        <input type="button" id="search_btn" value="Search" />
-      
-      <ul id="posts">
-        
-      </ul>
-
-      <script>
+    	<a id="top-of-page"></a>
+		<div id="wrap" class="clearfix">
+			<div class="col_12">
+				<div>
+					<div width="col_7"style='padding:0'>
+						<label>Title</label>
+						<input type='text' id='post_title' />
+						<label>Text</label>
+						<textarea id='post_content' ></textarea>
+					</div>
+					<div width="col_7" align='right' style='padding:0'>
+				
+							<input type="button" id="create_post_btn" value="Create Post" class="green"/>
+							<input type="button" id="refresh_posts_btn" value="Refresh Posts" class="green"/>
+					</div>
+					<div style='padding:0'>
+					
+							<input type="text" id="search_text" placeholder="Search" class = "col_5" />
+							<input type="button" id="search_btn" value="Search" class = "blue"/>
+					
+					
+						<ul id="posts">
+						</ul>
+					</div >
+				</div >
+				<script>
  
       $(document).ready(function(){
         
@@ -42,20 +56,21 @@
         */
         
         Post.method('toHtml', function(){ 
-          result = "<li class='post' post_id='"+this.Id+"'>";
-          result = result + "<h3>"+this.title;
-          result = result + "<a class='post_delete' post_id='"+this.Id+"' href='#'>Delete</a>"
-          result = result + "<a class='post_edit'   post_id='"+this.Id+"' href='#'>Edit</a></h3>"
-          result = result + "<div class='post_content'>"+ this.content+ "</div>";
-          
-          result = result + "<input type='button' class='create_comment_btn' post_id='"+this.Id+"' value='Comment It'>"
-          result = result + "</li>";
+		 
+          result = "<li class='post' post_id='"+this.Id+"'>"
+		  result = "<div class='clearfix col_5'>"
+          result = result + "<h3>"+this.title+"</h3>"
+          result = result + "<textarea class='post_content' class='col_3'>"+ this.content+ "</textarea>"
+		  result = result + "<div align='right' class='folat:left'>"
+          result = result + "<input type='button' class='post_edit blue' post_id='"+this.Id+"' value='Edit'>"
+		  result = result + "<input type='button' class='post_delete blue' class='.red' post_id='"+this.Id+"' value='Delete'>"
+          //result = result + "<input type='button' class='create_comment_btn' post_id='"+this.Id+"' value='Comment It'>"
+		  result = result + "</div>"
+		  result = result + "</div>"
+		  result = result + "</li>"
           return result;
         });
-        
-        
-  
-        /* Init listeners */
+      
         
         RedrawPosts = function(posts) {
           $("#posts").empty();
@@ -81,7 +96,7 @@
           })
         });
         
-        $('#refresh_posts_btn').click(function(){
+        $('#refresh_postposts_btn').click(function(){
           RefreshPosts();
         });
         
@@ -115,8 +130,8 @@
         RefreshPosts();
         
       });
-        
-
-    	</script>
+				</script>
+			</div>
+		</div>
     </body>
 </html>
