@@ -72,6 +72,8 @@ $(document).ready(function () {
 	var refreshActions = function () {
 		$("#actions_wrapper").empty();
 		
+		if (project_id == "1") { return; }
+		
 		
 		var button_html = '<br/><hr />';
 		button_html += '<input id="table_name" type="text" class="col_3" placeholder="Table name" />';
@@ -149,19 +151,26 @@ $(document).ready(function () {
 		
 		table_html += '<div class="table_wrapper" id="table_wrapper_' + table_name +'"><hr />';
 		table_html += '<h3 class="table_header">' + table_name + '</h3>';
-		table_html += '<span class="icon gray remove_table"><span aria-hidden="true">X</span></span>';
+		if (project_id != "1") {
+			table_html += '<span class="icon gray remove_table"><span aria-hidden="true">X</span></span>';
+		}
 		table_html += '<table class="table_table" id="table_table_' + table_name + '"><thead>';
 		table_html += '<tr><th>Column name</th><th>Data type</th><th>Has index?</th><th></th></tr>';
 		table_html += '</thead></table>';
-		table_html += '<input id="column_name_tb_' + table_name + '" class="col_3 column_name_tb" type="text" placeholder="Column name"></input>';
-		table_html += '<select class="column_type_select" id="column_type_select_' + table_name + '">' +
-	                  '<option value="string">String</option>' +
-	                  '<option value="integer">Integer</option>' +
-	                  '<option value="boolean">Boolean</option>' +
-	                  '<option value="date">Date</option>' +
-	                  '</select>';
-		table_html += '<input type="checkbox" class="index_flag" id="index_flag_' + table_name + '" style="margin: 16px 0 0px 0;" /> <label for="index_flag_' + table_name + '" class="inline">Has index? </label>';
-		table_html += '<button class="small add_column" id="add_column_' + table_name + '"><span class="icon"><span aria-hidden="true">+</span></span>Add column</button>';
+		
+		if (project_id != "1") {
+			table_html += '<input id="column_name_tb_' + table_name + '" class="col_3 column_name_tb" type="text" placeholder="Column name"></input>';
+			table_html += '<select class="column_type_select" id="column_type_select_' + table_name + '">' +
+		                  '<option value="string">String</option>' +
+		                  '<option value="integer">Integer</option>' +
+		                  '<option value="boolean">Boolean</option>' +
+		                  '<option value="date">Date</option>' +
+		                  '</select>';
+			table_html += '<input type="checkbox" class="index_flag" id="index_flag_' + table_name + '" style="margin: 16px 0 0px 0;" /> <label for="index_flag_' + table_name + '" class="inline">Has index? </label>';
+			table_html += '<button class="small add_column" id="add_column_' + table_name + '"><span class="icon"><span aria-hidden="true">+</span></span>Add column</button>';
+		}
+		
+		
 		table_html += '<br /></div>';
 		
 		$("#tables_wrapper").append(table_html);
@@ -184,7 +193,11 @@ $(document).ready(function () {
 			column_html += "yes";
 		}
 		column_html += '</td>';
-		column_html += '<td><span class="icon gray remove_column"><span aria-hidden="true">X</span></span></td>';
+		column_html += '<td>';
+		if (project_id != "1") {
+			column_html += '<span class="icon gray remove_column"><span aria-hidden="true">X</span></span>';
+		}
+		column_html += '</td>';
 		column_html += '</tr>';
 		
 		$('#table_table_' + table_name).append(column_html);
