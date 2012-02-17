@@ -1,95 +1,125 @@
 <!DOCTYPE html>
-
-<html>
+<html>		
     <head>
-        <title>#{get 'title' /}</title>
+		<title>#{get 'title' /}</title>
         <meta charset="${_response_encoding}">
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-        <!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->   
-        <script type="text/javascript" src="@{'/public/js/tundra.js'}"></script>
-        <script type="text/javascript" src="@{'/public/js/models/models1.js'}"></script>
-        <script type="text/javascript" src="@{'/public/js/views/view1.js'}"></script>
-        <link rel="stylesheet" type="text/css" href="/public/css/test.css">
 
+		<link rel="stylesheet" type="text/css" href="@{'/public/css/kickstart.css'}" media="all" />
+		<link rel="stylesheet" type="text/css" href="@{'/public/css/style.css'}" media="all" />
+		<link rel="stylesheet" type="text/css" href="/public/css/test.css">
+	   #{get 'moreStyles' /}
+        <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+		
+        <script src="@{'/public/js/jquery-1.6.4.min.js'}" type="text/javascript" charset="${_response_encoding}"></script>
+        <script type="text/javascript" src="@{'/public/js/prettify.js'}"></script>
+		<script type="text/javascript" src="@{'/public/js/kickstart.js'}"></script>
+		<script type="text/javascript" src="@{'/public/js/tundra.js'}"></script>
+        <script type="text/javascript" src="@{'/public/js/models/models1.js'}"></script>
+		#{get 'moreScripts' /}
     </head>
     <body>
-      
-      <a href='#' class='Post_list_btn'>Post list</a>
-      <a href='#' class='Comment_list_btn'>Comment list</a>
-      
-      <div id="content">
-      </div>
-      
-      <script>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+		<!--[if lt IE 9]><script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    	<a id="top-of-page"></a>
+		<div id="wrap" class="clearfix">
+			<div class="col_12">
+				<div>
+					<div width="col_7"style='padding:0'>
+						<label>Title</label>
+						<input type='text' id='post_title' />
+						<label>Text</label>
+						<textarea id='post_content' ></textarea>
+					</div>
+					<div width="col_7" align='right' style='padding:0'>
+						<input type="button" id="create_post_btn" value="Create Post" class="green"/>
+						<input type="button" id="refresh_posts_btn" value="Refresh Posts" class="green"/>
+					</div>
+					<div style='padding:0'>
+						<input type="text" id="search_text" placeholder="Search" class = "col_5" />
+						<input type="button" id="search_btn" value="Search" class = "blue"/>
+						<ul id="posts">
+						</ul>
+					</div >
+				</div >
+			</div>
+		</div>
+    </body>
+</html>
+	<script>
  
-      $(document).ready(function(){
+      $(document).ready(function(){     
+        /* 
+          Dynamically adding behaviours to our models.
+          I think the best practice is to group these calls in separate JS-files  
+        */
+        
+        Post.method('toHtml', function(){ 
+		 
+          result = "<li class='post' post_id='"+this.Id+"'>"
+          result = result + "<h3>"+this.title+"</h3>"
+          result = result + "<textarea class='post_content' class='col_3' id = 'post"+this.Id+"'>"+ this.content+ "</textarea>"
+		  result = result + "<div align='right' class='folat:left'>"
+          result = result + "<input type='button' class='post_edit blue' post_id='"+this.Id+"' value='Edit'>"
+		  result = result + "<input type='button' class='post_delete blue' class='.red' post_id='"+this.Id+"' value='Delete'>"
+		  result = result + "</div>"
+		  result = result + "</li>"
+          return result;
+        });
+      
+        
+        RedrawPosts = function(posts) {
+          $("#posts").empty();
+            for (var key in posts) {
+              var post = posts[key];
+              $("#posts").append(post.toHtml());
+            }  
 
-        RefreshPostObjects = function(){
-          Post.order("Id","desc").getObjects(function(objects){
-            $("#content").empty();
-            $('#content').html(PostView.renderList(objects));
+        }
+        
+        RefreshPosts = function(){
+          Post.order("Id","desc").getObjects(function(posts){
+            RedrawPosts(posts);
           });
         };
         
-        /* Post list */
-        $('.Post_list_btn').click(function(){
-          RefreshPostObjects();
+        $('#create_post_btn').click(function(){        
+		  post = new Post();
+          post.title = $('#post_title').val();
+          post.content = $('#post_content').val();
+          post.save(function(){
+           RefreshPosts();
+          })
         });
         
-        /* New Post */
-        $(document).delegate(".Post_new_btn", "click", function(){
-            $("#content").empty();
-            $('#content').html(PostView.renderNew());
+        $('#refresh_postposts_btn').click(function(){
+          RefreshPosts();
         });
         
-        /* Create Post */
-        $(document).delegate("#Post_create_btn", "click", function(){
-            object = new Post();
-            object.title = $('#Post_title_input').val();
-            object.content = $('#Post_content_input').val();
-            object.date_create = $('#Post_date_create_input').val();      
-            object.save(function(){
-              RefreshPostObjects();
-            })
-        });
-        
-        /* Delete Post */
-        $(document).delegate(".Post_delete_btn", "click", function(){
-          var objectId = $(this).attr("object_id");
-          Post.deleteId(objectId, function(){
+        $(document).delegate(".post_delete", "click", function(){
+          var postId = $(this).attr("post_id");
+          Post.deleteId(postId, function(){
             alert('Post was successfully deleted');
-            RefreshPostObjects();
+            RefreshPosts();
           });
         });
         
-        /* Edit Post */
-        $(document).delegate(".Post_edit_btn", "click", function(){
-          var objectId = $(this).attr("object_id");
-          Post.open(objectId,function(object){
-            $('#content').empty();
-            $('#content').html(PostView.renderEdit(object));
+        $(document).delegate(".post_edit", "click", function(){
+          var postId = $(this).attr("post_id");
+          alert( $('#post'+postId+'').val());
+          post = Post.open(postId);   
+        });
+        
+        $('#search_btn').click(function(){
+          var searchText = $('#search_text').val();
+          Post.where('content','contains',searchText).order("Id","desc").getObjects(function(posts){
+            RedrawPosts(posts);
           });
         });
         
-        /* Update Post */
-        $(document).delegate(".Post_update_btn", "click", function(){
-          var objectId = $(this).attr("object_id");
-          Post.open(objectId,function(object){
-            object.title = $('#Post_title_input').val();
-            object.content = $('#Post_content_input').val();
-            object.date_create = $('#Post_date_create_input').val();   
-            object.save(function(){
-              RefreshPostObjects();
-            })
-          });
-        });
-      
-        /* Let's go */      
-        RefreshPostObjects();
+        
+        /* Let's go */
+        
+        RefreshPosts();
         
       });
-        
-
-    	</script>
-    </body>
-</html>
+	</script>

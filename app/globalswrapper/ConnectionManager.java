@@ -28,9 +28,7 @@ public class ConnectionManager {
         	System.out.println("connection is null");
             try
             {
-            	System.out.println("trying to get new connection");
-                 _connection =  (com.intersys.globals.Connection) ConnectionContext.getConnection(); // ConnectionContext.getConnection();
-                 System.out.println(_connection);
+                 _connection =  (com.intersys.globals.Connection) ConnectionContext.getConnection();
                 if (!_connection.isConnected())
                 {
                     _connection.connect("USER","_SYSTEM","DATA");
@@ -39,12 +37,10 @@ public class ConnectionManager {
             catch (GlobalsException ex)
             {
             	System.out.println(ex.toString());
-                //ex.printStackTrace();
             }
             catch (Exception ex2)
             {
             	System.out.println(ex2.toString());
-                //ex2.Trace();
             }
         }
         return _connection;

@@ -6,9 +6,9 @@ $(document).ready(function() {
 				var elements = '<li>';
 				
 				if (this.IsSchemaExists == true) {
-					elements = elements + '<a href="/schema/' + this.project_id +'"><button class="small create_scheme_button"><span class="icon"><span aria-hidden="true">F</span></span>show or edit scheme</button></a>';
+					elements = elements + '<a href="/schema/' + this.project_id +'"><button class="small create_scheme_button"><span class="icon"><span aria-hidden="true">F</span></span>show or edit schema</button></a>';
 				} else {
-					elements = elements + '<a href="/schema/' + this.project_id +'"><button class="small create_scheme_button"><span class="icon"><span aria-hidden="true">f</span></span>create scheme</button></a>';
+					elements = elements + '<a href="/schema/' + this.project_id +'"><button class="small create_scheme_button"><span class="icon"><span aria-hidden="true">f</span></span>create schema</button></a>';
 				}
 				elements = elements + '<span>' + this.project_name + '</span></li>';
 				
