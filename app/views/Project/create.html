@@ -18,7 +18,9 @@ $(document).ready(function() {
 		}
 		else {
 			$('#project_name').removeClass('error');
-			var result = {project_name: $('#project_name').val()};
+			var project_name = $('#project_name').val().replace(/ /gi, "_");
+			
+			var result = {project_name: project_name};
 			$.post("/project/new_project", JSON.stringify(result),function (data) {
 				
 			}, "json");

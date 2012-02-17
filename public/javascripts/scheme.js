@@ -89,7 +89,7 @@ $(document).ready(function () {
 	// Create table button click handler
 	$('#create_table').live('click', function () {
 		var table = {};
-		table.table_name = $('#table_name').val();
+		table.table_name = $('#table_name').val().replace(/ /gi, "_");
 		if (table.table_name == "") {
 			$('#table_name').addClass("error");
 		} else {
@@ -105,7 +105,7 @@ $(document).ready(function () {
 	$('button.add_column').live('click', function () {
 		var table_name = this.id.replace('add_column_', '');
 		var columnNameInput = $('#column_name_tb_' + table_name);
-		var columnName = columnNameInput.val();
+		var columnName = columnNameInput.val().replace(/ /gi, "_");
 		
 		if (columnName == "") {
 			columnNameInput.addClass("error");
