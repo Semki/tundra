@@ -9,7 +9,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class FilterCondition {
-	public boolean IsNegative;
+	
+	public Boolean IsIndexed;
+	public Boolean IsNegative = false;
 	public String FieldName;
 	public FieldType DataType;
 	public String TableName;
@@ -28,6 +30,22 @@ public class FilterCondition {
 		return result;
 	}
 	
+	public Boolean ConditionTypeIsAppropriateForIndexing()
+	{
+		return false;
+		/*
+		if (CondType.equalsIgnoreCase(ConditionType.CONTAINS))
+		{
+			return false;
+		}
+		
+		if (CondType.equalsIgnoreCase(ConditionType.NOTEQUAL))
+		{
+			return false;
+		}
+		
+		return true;*/
+	}
 	
 	public Boolean IsValid(JsonObject record)
 	{

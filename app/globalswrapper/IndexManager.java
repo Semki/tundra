@@ -28,7 +28,7 @@ public class IndexManager {
 		FillIndexedColumnNamesFromTableInfo();
 	}
 
-	private static String IS_INDEXED_FIELD = "has_index"; 
+	
 	private void FillIndexedColumnNamesFromTableInfo()
 	{
 		IndexedColumnNames = new ArrayList<String>();
@@ -38,7 +38,7 @@ public class IndexManager {
 		for (int i=0; i<columns.size(); i++)
 		{
 			JsonObject column = columns.get(i).getAsJsonObject();
-			if (column.has(IS_INDEXED_FIELD) && (column.get(IS_INDEXED_FIELD).getAsBoolean() == true))
+			if (SchemaManager.IsColumnIndexed(column))
 			{
 				if (column.has(SchemaManager.COLUMN_NAME))
 				{
@@ -47,6 +47,8 @@ public class IndexManager {
 			}
 		}
 	}
+	
+	
 	
 	public void AfterCreateRecord(JsonObject newRecord)
 	{
@@ -169,5 +171,9 @@ public class IndexManager {
 	{
 		indexNode.kill(indexFieldName, ConvertToIndex(fieldValue), objectId);
 	}
+	
+	
+	
+	
 	
 }
