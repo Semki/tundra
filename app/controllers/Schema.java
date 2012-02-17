@@ -61,7 +61,6 @@ public class Schema extends BaseController {
 	}
 	
 	public static void form(long project_id) {
-		System.out.println("pr id:" + project_id);
 		render(project_id);
 	}
 	

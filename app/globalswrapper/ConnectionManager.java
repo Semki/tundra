@@ -25,7 +25,6 @@ public class ConnectionManager {
     {
         if (_connection == null)
         {
-        	System.out.println("connection is null");
             try
             {
                  _connection =  (com.intersys.globals.Connection) ConnectionContext.getConnection();

@@ -81,19 +81,14 @@ public class IndexManager {
 		for (int i=0; i<IndexedColumnNames.size(); i++)
 		{
 			fieldName = IndexedColumnNames.get(i);
-			//System.out.println("trying to kill fieldName"+fieldName);
 			fieldValue = record.get(fieldName).getAsString();
-			//System.out.println("fieldValue "+fieldValue);
 			
 			if (insertMode)
 			{
-				//System.out.println("SetIndexValue "+fieldValue);
 				SetIndexValue(node, Id, fieldName, fieldValue);
 			}
 			else
 			{
-				//System.out.println("trying to kill");
-				
 				KillIndexValue(node, Id, fieldName, fieldValue);
 			}
 		}

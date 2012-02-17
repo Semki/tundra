@@ -27,58 +27,6 @@ public class ListWorker {
 		list = PaginateItems(list, requiredPage);
 		return list;
 	}
-	
-	/*
-	public ArrayList<JsonObject> ApplyFilter(FilterExpression expression)
-	{
-		ArrayList<JsonObject> list = new ArrayList<JsonObject>();
-		
-		String globalName = Utils.TableNameToGlobalsName(TableName+SchemaManager.Instance().GetProjectPrefix(ProjectId));  
-		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(globalName);
-		
-		Long key = (long)0;
-		
-		//FilterApplicator applicator = new FilterApplicator(ProjectId, TableName, condition);
-		//FilterExpression expression = new FilterExpression(conditions, projectId)
-		
-		// фильтрация через индексы
-		// считаем что фильтр у нас только И, или сложнее. 
-		// 1. определяем порядок выполнения - extent\selectivity
-		// 2. функция выборки нужных значений из индекса
-		// 3. кладем в хэш выборки
-		// 4. итерационно пробегаемся по остальным индексам - и создаем новый хэш, добавляем туда значения присутствующие в индексе и в хэше 1
-		// 5. далее хэш 2 делаем основным хэшем - по сути интерсектим результат.
-		// 6. так для всех индексированных полей??
-		// 7. применяем фильтрацию на записи
-		
-		while (true)
-		{
-			String strKey = node.nextSubscript(key);
-			if (strKey.equals(""))
-				break;
-			key = Long.parseLong(strKey);
-			String nodeValue = node.getObject(key, "JSON").toString();
-			JsonObject obj = new JsonParser().parse(nodeValue).getAsJsonObject();
-
-			
-			if (expression == null)
-			{
-				list.add(obj);
-			}
-			else
-			{
-				if (expression.IsValid(obj))
-				{
-					list.add(obj);
-				}
-			}
-						
-		}
-		
-		return list;
-		
-	}*/
-	
 
 	public ArrayList<JsonObject> ApplyFilter2(FilterExpression expression)
 	{
@@ -93,7 +41,6 @@ public class ListWorker {
 				return FullScan(expression);
 			}
 			
-			
 			ArrayList<Long> setToScan = ExtractSubSetByIndexedCondtions(expression);
 			return ScanSet(expression, setToScan);
 		}
@@ -103,11 +50,8 @@ public class ListWorker {
 	private ArrayList<Long> ExtractSubSetByIndexedCondtions(FilterExpression expression)
 	{
 		ArrayList<Long> setToScan = null;
-		
-
 		String globalName =  SchemaManager.GetGlobalIndexByTableNameAndProjectId(this.TableName, this.ProjectId);
 		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(globalName);
-		
 		
 		for (Map.Entry<String, ArrayList<FilterCondition>> entry : expression.IndexedCondtionsByFieldName.entrySet()) 
 		{ 
@@ -146,9 +90,7 @@ public class ListWorker {
 					left = condition;
 					right = condition;
 				}
-				
 				continue;
-				
 			}
 			
 			// if left = right, we have not to add a conditions
@@ -156,7 +98,6 @@ public class ListWorker {
 			{
 				continue;
 			}
-			
 			
 			if (conditionType.equalsIgnoreCase(ConditionType.GRETATEOREQUAL) || condition.CondType.equalsIgnoreCase(ConditionType.GREATER))
 			{
@@ -166,7 +107,6 @@ public class ListWorker {
 				{
 					left = condition;
 				}
-				
 			}
 
 			if (conditionType.equalsIgnoreCase(ConditionType.LESOREQUAL) || condition.CondType.equalsIgnoreCase(ConditionType.LESS))
@@ -177,7 +117,6 @@ public class ListWorker {
 				{
 					right = condition;
 				}
-				
 			}
 		}
 		
@@ -186,10 +125,6 @@ public class ListWorker {
 		range.add(1, right);
 		return range;
 	}
-
-	
-	
-	
 	
 	/// extract from index values
 	private ArrayList<Long> ExtractFromIndex(NodeReference node, ArrayList<Long> previousSetToScan, FilterExpression expression, ArrayList<FilterCondition> conditions, String indexName)
@@ -246,8 +181,6 @@ public class ListWorker {
 	{
 		return indexValue.substring(1);
 	}
-	
-	
 	
 	/// filter sub set
 	private ArrayList<JsonObject> ScanSet(FilterExpression expression, ArrayList<Long> setToScan)

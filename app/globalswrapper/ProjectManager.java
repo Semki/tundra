@@ -24,8 +24,6 @@ public class ProjectManager {
 	
 	public JsonObject CreateProject(JsonObject projectInfo)
 	{
-		//System.out.println("projectInfo");
-		//System.out.println(projectInfo);
 		if (projectInfo == null)
 		{
 			System.out.println("Null project info applied.");
@@ -35,8 +33,6 @@ public class ProjectManager {
 		if (projectInfo.has(PROJECT_NAME))
 		{
 			String name = projectInfo.get(PROJECT_NAME).toString();
-			
-			//System.out.println("projectsGlobal"+SchemaManager.Instance().GetProjectsStorageGlobalsName());
 			
 			NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(SchemaManager.Instance().GetProjectsStorageGlobalsName());
 			node.setSubscriptCount(0);

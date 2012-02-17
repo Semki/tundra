@@ -38,15 +38,11 @@ public class FilterExpression {
 		for (int i=0;i<conditions.size(); i++)
 		{
 			FilterCondition condition = conditions.get(i);
-			
-			System.out.println("is null condition? = "+condition);
 			JsonObject column = SchemaManager.Instance().GetColumnByProjectIdAndTableName(projectId, condition.TableName, condition.FieldName);
-			System.out.println("is null column ? = "+column);
+
 			if (column != null)
 			{
-				System.out.println("column = "+column);
 				condition.DataType =  FieldType.getType(column.get(SchemaManager.DATA_TYPE).getAsString());
-				System.out.println("condition.DataType = "+condition.DataType);
 				condition.IsIndexed =  SchemaManager.IsColumnIndexed(column);
 				if (condition.IsIndexed && condition.ConditionTypeIsAppropriateForIndexing())
 				{
@@ -83,7 +79,6 @@ public class FilterExpression {
 	
 	public Boolean IsValid(JsonObject record)
 	{
-		System.out.println("conditions = "+conditions);
 		if (conditions == null)
 			return true;
 
@@ -93,7 +88,6 @@ public class FilterExpression {
 			FilterCondition condition = conditions.get(i);
 			if (condition != null)
 			{
-				System.out.println("condition = "+condition);
 				conditionIsValid = condition.IsValid(record);
 				if (condition.IsNegative)
 				{

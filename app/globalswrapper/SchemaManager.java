@@ -83,9 +83,6 @@ public class SchemaManager {
 	public JsonObject GetColumnByProjectIdAndTableName(Long projectId, String tableName, String fieldName) 
 	{
 		JsonObject tableInfo = ReadTable(tableName, projectId);
-		
-		System.out.println("tableInfo ? = "+tableInfo);
-		System.out.println("fieldName ? = "+fieldName);
 		return GetColumnInfo(tableInfo, fieldName);
 	}
 	
@@ -97,11 +94,9 @@ public class SchemaManager {
 
 	private JsonObject GetColumnInfo(JsonObject table, String columnName) {
 		JsonArray columns = GetColumns(table);
-		System.out.println("columns ? = "+columns);
 		for (int i = 0; i < columns.size(); i++) {
 			JsonObject column = columns.get(i).getAsJsonObject();
 			if (column.get(COLUMN_NAME).getAsString().equalsIgnoreCase(columnName)) {
-				System.out.println("column founded  = "+column);
 				return column;
 			}
 
@@ -207,8 +202,6 @@ public class SchemaManager {
 				object.add(subscript, o);
 			}
 		} while (subscript.length() > 0);
-
-		// System.out.println(object.toString());
 
 		node.close();
 		return object;

@@ -74,16 +74,12 @@ public class CRUDManager {
     
         String globalName = SchemaManager.GetGlobalDataByTableNameAndProjectId(tableName, projectId);
         
-        if (!object.has(ID))
-        {
+        if (!object.has(ID)){
         	return null;
         }
         
         String sid = object.get(ID).getAsString();
-        System.out.println("sid = "+sid);
         Long id = Long.parseLong(sid);
-        
-        
         try
         {
         	connectionManager.getConnection().startTransaction();
@@ -136,11 +132,6 @@ public class CRUDManager {
         	throw ex;
         }
         
-    
         return true;
     }
-    
-    
-    
-
 }

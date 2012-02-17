@@ -21,7 +21,6 @@ public class FilterCondition {
 	public static FilterCondition getFromJsonObject(String tableName, JsonObject object)
 	{
 		FilterCondition result = new FilterCondition();
-		//result.ProjectId = projectId;
 		result.TableName = tableName;
 		result.FieldName = object.get("fieldName").getAsString();
 		result.CondType = object.get("conditionType").getAsString();
@@ -50,7 +49,6 @@ public class FilterCondition {
 	public Boolean IsValid(JsonObject record)
 	{
 		JsonElement nodeValue = record.get(FieldName);
-		//System.out.println("DataType = "+DataType);
 		switch (DataType)
 		{
 			case STRING_TYPE: 
@@ -125,14 +123,10 @@ public class FilterCondition {
 		{
 			return StringIsEqual(nodeValue);
 		}
-		
-		System.out.println("CondType =   "+CondType);
+	
 		if (CondType.equalsIgnoreCase(ConditionType.CONTAINS))
 		{
-			System.out.println("Gotcha CONTAINS  ");
-			
 			Boolean res = StringContains(nodeValue);
-			System.out.println("ConditionType.CONTAINS, nodeValue = "+nodeValue+ "' result is "+res);
 			return StringContains(nodeValue);
 		}
 		return false;
