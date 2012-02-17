@@ -8,9 +8,4 @@ public class ConditionType {
 	public static String LESOREQUAL = "<=";
 	public static String NOTEQUAL = "!=";
 	public static String CONTAINS = "contains";
-	
-	
-
-	
-	
 }

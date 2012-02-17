@@ -23,7 +23,6 @@ public class CRUD extends BaseController{
 	public static void list(Long projectId, String tableName, JsonObject jsonParam)
 	{
 		try {
-		
 			if (jsonParam==null){
 				jsonParam = new JsonObject();
 			}
