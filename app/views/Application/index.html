@@ -48,6 +48,10 @@ validations and transactions.</li>
 	<li>Enjoy It!</li>	
 </ol>
 
+<p>Note that after schema creation you are able to download auto-generated template of your views. It consist of js-file and html file. Feel free to download and modify these
+resources to quick start with Tundra. 
+</p>
+
 <h3>JavaScript layer guide</h3>
 
 <p>Assume you've just created schema with one table <strong>Person</strong> which has 3 columns: <i>"firstname"</i>, <i>"lastname"</i>, <i>"age"</i></p>
@@ -80,14 +84,14 @@ Person.open(1,function(person){ // get person with Id=1
 Person.open(1,function(person){
   person.age = 29;
   person.save(function(){
-    alert('succesfully changed age to 29');
+    alert('Age was succesfully changed to 29');
   });
 });</pre>
 
 	<li>Delete object</li>
 	<pre class="js prettyprint">
 Person.deleteId(1,function(){
-    alert('Alex was deleted');
+    alert('Alex left');
   });
 });</pre>
 	
