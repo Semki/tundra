@@ -21,6 +21,8 @@ POST /objects/{projectId}/{tableName}		    CRUD.create
 
 DELETE /objects/{projectId}/{tableName}/{id}	CRUD.delete
 
+PUT /objects/{projectId}/{tableName}/{id}		CRUD.update
+
 POST /schema/create								Schema.create
 
 GET /schema/read/{project_id}					Schema.read

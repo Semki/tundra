@@ -24,19 +24,27 @@ public class Schema extends BaseController {
 			e.printStackTrace();
 			Utils.writeToFile("", e.toString());
 		}
+	
+		// generate JavaScripts
+		String url = "";
 
 		
-		// generate JavaScript
-		JSGenerator generator = new JSGenerator();
-		String url = "";
 		try {
 			
-			String fileName = generator.Generate(body, projectId.toString());
 			InetAddress addr = InetAddress.getLocalHost();
-			String port = request.port.toString();					
-			String hostname = addr.getHostName();	
-			url = hostname+":"+port+fileName;
-			System.out.println(url);
+			String port = request.port.toString();
+			String hostname = addr.getHostAddress();
+			String serverUrl = hostname + ":" + port;
+			
+			JSGenerator generator = new JSGenerator(body, projectId.toString(),serverUrl);
+			
+			
+			String modelFileName = generator.GenerateModelJs(hostname, port);	
+			url = serverUrl + modelFileName;
+			
+			String viewFileName = generator.GenerateViewJs();
+			String htmlFileName = generator.GenerateHtml();
+			
 			
 		} catch (Exception e) {
 			System.out.println(e.toString());
