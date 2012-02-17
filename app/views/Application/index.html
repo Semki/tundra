@@ -97,5 +97,19 @@ Person.deleteId(1,function(){
 Person.where('age','<',28).order("age","desc").getObjects(function(people){
   RedrawPeople(people);
 });</pre>
+
+	<li>Add dynamic behaviour</li>
+	<p>You may add methods to your objects</p>
+	<pre class="js prettyprint">
+Person.method("fullname",function(){
+  return this.firstname + " " + this.lastname;
+});
+
+// Use method
+Person.open(1,function(person){
+  alert(person.fullname());
+}
+</pre>
+
 	
 </ol>
