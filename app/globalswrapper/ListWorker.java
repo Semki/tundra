@@ -104,28 +104,149 @@ public class ListWorker {
 	{
 		ArrayList<Long> setToScan = null;
 		
+
+		String globalName =  SchemaManager.GetGlobalIndexByTableNameAndProjectId(this.TableName, this.ProjectId);
+		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(globalName);
+		
+		
 		for (Map.Entry<String, ArrayList<FilterCondition>> entry : expression.IndexedCondtionsByFieldName.entrySet()) 
 		{ 
-			setToScan = ExtractFromIndex(setToScan, expression, entry.getValue());
-			// we supply a only AND filter at the moment, that's why if searched 0 - we can stop.
+			setToScan = ExtractFromIndex(node, setToScan, expression, entry.getValue(), entry.getKey());
+			// we supply a only AND filter at the moment, that's why if founded count = 0 - we can stop.
 		    if (setToScan.size() == 0)
 		    	return setToScan;
 		} 
 		return setToScan;
 	}
 	
-	/// Возвращаем набор записей
-	private ArrayList<Long> ExtractFromIndex(ArrayList<Long> previousSetToScan, FilterExpression expression, ArrayList<FilterCondition> conditions)
+	private ArrayList<FilterCondition> PrepareIndexRangeByConditions(ArrayList<FilterCondition> conditions)
+	{
+		ArrayList<FilterCondition> range = new ArrayList<FilterCondition>();
+		FilterCondition left = null;
+		FilterCondition right = null;
+		
+		for (int i=0; i<conditions.size(); i++)
+		{
+			FilterCondition condition = conditions.get(i);
+			String conditionType = condition.CondType;
+			// if equal => left = right, if left = right already the check values - if different - then range = null
+			if (conditionType.equalsIgnoreCase(ConditionType.EQUAL))
+			{
+				// we've already meet 
+				if (left != null && left.CondType.equalsIgnoreCase(ConditionType.EQUAL))
+				{
+					// we have a error 1 && 0 = 0
+					if (!left.FilterValue.toString().equalsIgnoreCase(condition.FilterValue.toString()))
+					{
+						return null;
+					}
+				}
+				else
+				{
+					left = condition;
+					right = condition;
+				}
+				
+				continue;
+				
+			}
+			
+			// if left = right, we have not to add a conditions
+			if (left.equals(right))
+			{
+				continue;
+			}
+			
+			
+			if (conditionType.equalsIgnoreCase(ConditionType.GRETATEOREQUAL) || condition.CondType.equalsIgnoreCase(ConditionType.GREATER))
+			{
+				// if new condition value is greater, or values are equal and the condition is stronger - let's replace the condition
+				int comparedValues = left.CompareValues(condition);
+				if (comparedValues == -1 || (comparedValues == 0 && left.CompareConditionTypes(condition) == -1))
+				{
+					left = condition;
+				}
+				
+			}
+
+			if (conditionType.equalsIgnoreCase(ConditionType.LESOREQUAL) || condition.CondType.equalsIgnoreCase(ConditionType.LESS))
+			{
+				// if new condition value is greater, or values are equal and the condition is stronger - let's replace the condition
+				int comparedValues = right.CompareValues(condition);
+				if (comparedValues == 1 || (comparedValues == 0 && right.CompareConditionTypes(condition) == -1))
+				{
+					right = condition;
+				}
+				
+			}
+		}
+		
+		
+		range.add(0, left);
+		range.add(1, right);
+		return range;
+	}
+
+	
+	
+	
+	
+	/// extract from index values
+	private ArrayList<Long> ExtractFromIndex(NodeReference node, ArrayList<Long> previousSetToScan, FilterExpression expression, ArrayList<FilterCondition> conditions, String indexName)
 	{
 		ArrayList<Long> setToScan = new ArrayList<Long>();
-		// if IsFirstRun
-		if (previousSetToScan == null)
+		
+
+		// prepare range
+		ArrayList<FilterCondition> range = PrepareIndexRangeByConditions(conditions);
+		if (range == null)
+			return setToScan;
+		
+		
+		FilterCondition left = range.get(0);
+		FilterCondition right = range.get(1);
+	
+		String leftsubscript = "";
+		if (left != null)
 		{
-			// do not intersect
+			leftsubscript = left.FilterValue.toString();
+		}
+		
+		
+		String rightsubscript = "";
+		if (right != null)
+		{
+			rightsubscript = right.FilterValue.toString();
+		}
+		
+		rightsubscript = IndexManager.ConvertToIndex(rightsubscript);
+		leftsubscript = IndexManager.ConvertToIndex(leftsubscript);
+	
+		String key = "";
+		while (true)
+		{
+			key = node.nextSubscript(indexName, leftsubscript, key);
+			
+			
+			if (key.equals(""))
+				break;
+			
+			Long parsedKey = Long.parseLong(key);
+			if (previousSetToScan == null || (!previousSetToScan.contains(parsedKey)))
+				continue;
+			
+			
+			setToScan.add(parsedKey);
 		}
 		
 		return setToScan;
 	}
+	
+	private String ConvertFromIndex(String indexValue)
+	{
+		return indexValue.substring(1);
+	}
+	
 	
 	
 	/// filter sub set
@@ -180,8 +301,6 @@ public class ListWorker {
 			}
 			else
 			{
-				System.out.println("expression = "+expression);
-				System.out.println("obj = "+obj);
 				if (expression.IsValid(obj))
 				{
 					list.add(obj);
@@ -193,6 +312,8 @@ public class ListWorker {
 		return list;
 		
 	}
+	
+	
 	
 	public ArrayList<JsonObject> SortItems(ArrayList<JsonObject> items, SortCondition condition)
 	{

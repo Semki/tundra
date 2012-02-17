@@ -101,16 +101,12 @@ public class IndexManager {
 	
 	
 	
-	private String ConvertToIndex(String fieldValue)
+	static String ConvertToIndex(String fieldValue)
 	{
 		return " ".concat(fieldValue);
 	}
 	
-	private String ConvertFromIndex(String indexValue)
-	{
-		return indexValue.substring(1);
-	}
-	
+
 	
 	public void OnUpdateRecord(JsonObject oldRecord, JsonObject newRecord)
 	{
@@ -172,6 +168,10 @@ public class IndexManager {
 		indexNode.kill(indexFieldName, ConvertToIndex(fieldValue), objectId);
 	}
 	
+	
+	
+		
+		
 	
 	
 	

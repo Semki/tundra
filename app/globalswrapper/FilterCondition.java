@@ -50,11 +50,10 @@ public class FilterCondition {
 	public Boolean IsValid(JsonObject record)
 	{
 		JsonElement nodeValue = record.get(FieldName);
-		System.out.println("DataType = "+DataType);
+		//System.out.println("DataType = "+DataType);
 		switch (DataType)
 		{
 			case STRING_TYPE: 
-					System.out.println("Gotcha DataType = "+DataType);
 					return ApplyStringFilter(nodeValue.getAsString());
 			case DATE_TYPE: Date date = DataTypesHelper.StringToDate(nodeValue.getAsString());
 					return ApplyDateFilter(date);
@@ -63,10 +62,8 @@ public class FilterCondition {
 			default: 
 					return true;
 		}
-		
-		
-		
 	}
+	
 
 	// coming soon
 	private Boolean ApplyDateFilter(Date date)
@@ -152,6 +149,66 @@ public class FilterCondition {
 	{
 		Boolean result = nodeValue.equalsIgnoreCase(FilterValue.toString()); 
  		return  result;
+	}
+	
+	// Which condition value is greater?
+	public int CompareValues(FilterCondition comparedCondition)
+	{
+		switch (DataType)
+		{
+			case STRING_TYPE: 
+				FilterValue.toString().compareTo((String) comparedCondition.FilterValue);
+			case DATE_TYPE: 
+				FilterValue.toString().compareTo((String) comparedCondition.FilterValue);
+			case BOOLEAN_TYPE:
+				Boolean thisValue = Boolean.parseBoolean(FilterValue.toString());
+				return thisValue.compareTo(Boolean.parseBoolean(comparedCondition.FilterValue.toString()));
+			default: 
+				return 0;
+		}
+	}
+	
+	// Which condition type is stronger?
+	public int CompareConditionTypes(FilterCondition comparedCondition)
+	{
+		if (CondType.equalsIgnoreCase(comparedCondition.CondType))
+			return 0;
+		
+		if ((CondType.equalsIgnoreCase(ConditionType.GREATER) 
+			|| CondType.equalsIgnoreCase(ConditionType.GRETATEOREQUAL))
+			&&
+			(comparedCondition.CondType.equalsIgnoreCase(ConditionType.GREATER) ||  
+				comparedCondition.CondType.equalsIgnoreCase(ConditionType.GRETATEOREQUAL)))
+		{
+			if (CondType.equalsIgnoreCase(ConditionType.GREATER))
+			{
+				return 1;
+			}
+			else 
+			{
+				return -1; 
+			}
+		}
+		
+		
+		if ((CondType.equalsIgnoreCase(ConditionType.LESS) 
+			|| CondType.equalsIgnoreCase(ConditionType.LESOREQUAL))
+			&&
+			(comparedCondition.CondType.equalsIgnoreCase(ConditionType.LESS) ||  
+				comparedCondition.CondType.equalsIgnoreCase(ConditionType.LESOREQUAL)))
+		{
+			if (CondType.equalsIgnoreCase(ConditionType.LESS))
+			{
+				return 1;
+			}
+			else 
+			{
+				return -1; 
+			}
+		}
+		
+		return -2;
+		
 	}
 	
 }
