@@ -2,6 +2,8 @@ package globalswrapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -20,12 +22,13 @@ public class ListWorker {
 	
 	public ArrayList<JsonObject> GetList(FilterExpression expression, SortCondition sort, PageInfo requiredPage)
 	{
-		ArrayList<JsonObject> list = ApplyFilter(expression);
+		ArrayList<JsonObject> list = ApplyFilter2(expression);
 		list = SortItems(list, sort);
 		list = PaginateItems(list, requiredPage);
 		return list;
 	}
 	
+	/*
 	public ArrayList<JsonObject> ApplyFilter(FilterExpression expression)
 	{
 		ArrayList<JsonObject> list = new ArrayList<JsonObject>();
@@ -74,17 +77,119 @@ public class ListWorker {
 		
 		return list;
 		
+	}*/
+	
+
+	public ArrayList<JsonObject> ApplyFilter2(FilterExpression expression)
+	{
+		if (expression == null)
+		{
+			return FullScan(expression);
+		}
+		else
+		{
+			if (expression.IndexedCondtionsByFieldName.isEmpty())
+			{
+				return FullScan(expression);
+			}
+			
+			
+			ArrayList<Long> setToScan = ExtractSubSetByIndexedCondtions(expression);
+			return ScanSet(expression, setToScan);
+		}
 	}
 	
-	private HashMap<Long, JsonObject> filteredItems;
-	 
-	
-	// sort filter for efficency
-	private void OrderFilterExpression(FilterExpression expression)
+	// Apply on indexed fields conditions
+	private ArrayList<Long> ExtractSubSetByIndexedCondtions(FilterExpression expression)
 	{
-		ArrayList<Long> ids = new ArrayList<Long>();
+		ArrayList<Long> setToScan = null;
 		
-		///ArrayList<FilterExpression> expressions = new ArrayList<>()
+		for (Map.Entry<String, ArrayList<FilterCondition>> entry : expression.IndexedCondtionsByFieldName.entrySet()) 
+		{ 
+			setToScan = ExtractFromIndex(setToScan, expression, entry.getValue());
+			// we supply a only AND filter at the moment, that's why if searched 0 - we can stop.
+		    if (setToScan.size() == 0)
+		    	return setToScan;
+		} 
+		return setToScan;
+	}
+	
+	/// Возвращаем набор записей
+	private ArrayList<Long> ExtractFromIndex(ArrayList<Long> previousSetToScan, FilterExpression expression, ArrayList<FilterCondition> conditions)
+	{
+		ArrayList<Long> setToScan = new ArrayList<>();
+		// if IsFirstRun
+		if (previousSetToScan == null)
+		{
+			// do not intersect
+		}
+		
+		return setToScan;
+	}
+	
+	
+	/// filter sub set
+	private ArrayList<JsonObject> ScanSet(FilterExpression expression, ArrayList<Long> setToScan)
+	{
+		ArrayList<JsonObject> list = new ArrayList<JsonObject>();
+		String globalName = Utils.TableNameToGlobalsName(TableName+SchemaManager.Instance().GetProjectPrefix(ProjectId));  
+		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(globalName);
+		
+		for (int i=0;i<setToScan.size(); i++)
+		{
+			String nodeValue = node.getObject(setToScan.get(i), "JSON").toString();
+			JsonObject obj = new JsonParser().parse(nodeValue).getAsJsonObject();
+			if (expression == null)
+			{
+				list.add(obj);
+			}
+			else
+			{
+				if (expression.IsValid(obj))
+				{
+					list.add(obj);
+				}
+			}
+		}
+		return list;
+		
+	}
+	
+	/// full scan
+	private ArrayList<JsonObject> FullScan(FilterExpression expression)
+	{
+		ArrayList<JsonObject> list = new ArrayList<JsonObject>();
+		
+		String globalName = Utils.TableNameToGlobalsName(TableName+SchemaManager.Instance().GetProjectPrefix(ProjectId));  
+		NodeReference node = ConnectionManager.Instance().getConnection().createNodeReference(globalName);
+		
+		Long key = (long)0;
+		while (true)
+		{
+			String strKey = node.nextSubscript(key);
+			if (strKey.equals(""))
+				break;
+			key = Long.parseLong(strKey);
+			String nodeValue = node.getObject(key, "JSON").toString();
+			JsonObject obj = new JsonParser().parse(nodeValue).getAsJsonObject();
+
+			
+			if (expression == null)
+			{
+				list.add(obj);
+			}
+			else
+			{
+				if (expression.IsValid(obj))
+				{
+					list.add(obj);
+				}
+			}
+						
+		}
+		
+		return list;
+		
 	}
 	
 	public ArrayList<JsonObject> SortItems(ArrayList<JsonObject> items, SortCondition condition)

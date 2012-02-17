@@ -20,6 +20,7 @@ public class SchemaManager {
 	public static String COLUMN_TYPE = "ColumnType";
 	public static String COLUMN_NAME = "column_name";
 	public static String REQUIRED = "Required";
+	public static String IS_INDEXED_FIELD = "has_index"; 
 
 	private static SchemaManager _manager;
 
@@ -79,6 +80,12 @@ public class SchemaManager {
 		return FieldType.STRING_TYPE.getTypeValue();
 	}
 	
+	public JsonObject GetColumnByProjectIdAndTableName(Long projectId, String tableName, String fieldName) 
+	{
+		JsonObject tableInfo = ReadTable(tableName, projectId);
+		return GetColumnInfo(tableInfo, fieldName);
+	}
+	
 	public FieldType GetFieldTypeAsEnum(Long projectId, String tableName,
 			String fieldName) {
 		
@@ -99,6 +106,11 @@ public class SchemaManager {
 
 	private JsonArray GetColumns(JsonObject table) {
 		return table.get(COLUMNS_NAME).getAsJsonArray();
+	}
+	
+	public static Boolean IsColumnIndexed(JsonObject column)
+	{
+		return column.has(IS_INDEXED_FIELD) && (column.get(IS_INDEXED_FIELD).getAsBoolean() == true);
 	}
 
 	/*
