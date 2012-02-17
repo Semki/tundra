@@ -114,7 +114,7 @@ public class CRUDManager {
 
             NodeReference node =   connectionManager.getConnection().createNodeReference(globalName);
             node.setSubscriptCount(0);
-            node.appendSubscript(id);
+            //node.appendSubscript(id);
 
             //System.out.println("try read "+projectId + tableName + id);
             JsonObject oldRecord = Read(projectId, tableName, id);
