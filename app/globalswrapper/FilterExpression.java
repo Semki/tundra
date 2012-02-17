@@ -85,14 +85,17 @@ public class FilterExpression {
 		for (int i=0;i<conditions.size(); i++)
 		{
 			FilterCondition condition = conditions.get(i);
-			System.out.println("condition = "+condition);
-			conditionIsValid = condition.IsValid(record);
-			if (condition.IsNegative)
-				conditionIsValid = !conditionIsValid;
-		
-			if (!conditionIsValid)
+			if (condition != null)
 			{
-				return false;
+				System.out.println("condition = "+condition);
+				conditionIsValid = condition.IsValid(record);
+				if (condition.IsNegative)
+					conditionIsValid = !conditionIsValid;
+			
+				if (!conditionIsValid)
+				{
+					return false;
+				}
 			}
 		}
 		

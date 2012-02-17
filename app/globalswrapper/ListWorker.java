@@ -117,7 +117,7 @@ public class ListWorker {
 	/// Возвращаем набор записей
 	private ArrayList<Long> ExtractFromIndex(ArrayList<Long> previousSetToScan, FilterExpression expression, ArrayList<FilterCondition> conditions)
 	{
-		ArrayList<Long> setToScan = new ArrayList<>();
+		ArrayList<Long> setToScan = new ArrayList<Long>();
 		// if IsFirstRun
 		if (previousSetToScan == null)
 		{
