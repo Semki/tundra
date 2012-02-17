@@ -2,6 +2,8 @@
 
 tundraProjectId = ${project_id};
 
+tundraServerUrl = "http://${server_url}/";
+
 <#list tables as table>
 
 	${table.table_name} = function(fields) {
@@ -15,9 +17,11 @@ tundraProjectId = ${project_id};
 	${table.table_name}.getAll = function(successCallback) {
 	  TActiveRecord.getAll(this, successCallback);
 	}	
-	${table.table_name}.open = function(id) {
-	    return TActiveRecord.open(this, id);
+	
+	${table.table_name}.open = function(id, successCallback) {
+	    return TActiveRecord.open(this, id, successCallback);
 	}
+	
 	${table.table_name}.method = function(methodName, methodBody) {
     	TActiveRecord.method(this, methodName, methodBody);
   	}

@@ -60,34 +60,10 @@ public class CRUDManager {
     
     public JsonObject Read(Long projectId, String tableName, long id) throws Exception
     {
-    	
-    	//System.out.println("start read");
-    	
         String globalName = SchemaManager.GetGlobalDataByTableNameAndProjectId(tableName, projectId);
         NodeReference node = connectionManager.getConnection().createNodeReference(globalName);
-        
-       // System.out.println("node = "+node);
-        
         node.setSubscriptCount(0);
-        //System.out.println("set count = 0");
-        
-        //node.appendSubscript(id);
-        
-        //System.out.println("appended id"+id+" "+globalName);
-        
-        
-        //System.out.println("node = "+node.getString());
-        //System.out.println("node = "+node.getString("JSON"));
-        
-        //Object obj2 = node.getObject("JSON");
-        //System.out.println("obj2= "+obj2);
-        
-        
         String nodeValue = node.getObject(id, "JSON").toString(); 
-        		///node.getObject("JSON").toString();
-        
-        //System.out.println("nodeValue is "+nodeValue);
-        
         JsonObject response = new com.google.gson.JsonParser().parse(nodeValue).getAsJsonObject(); 
     	return response;
     }
@@ -114,21 +90,12 @@ public class CRUDManager {
 
             NodeReference node =   connectionManager.getConnection().createNodeReference(globalName);
             node.setSubscriptCount(0);
-            node.appendSubscript(id);
-
-            //System.out.println("try read "+projectId + tableName + id);
             JsonObject oldRecord = Read(projectId, tableName, id);
-            //System.out.println("readed = "+oldRecord);
             
             IndexManager manager = new IndexManager(tableName, projectId);
 	        manager.OnUpdateRecord(oldRecord, object);
-	        //System.out.println("put index data dine ");
-	        
-	        
-            node.set(object.toString(), id, "JSON"); 
+	        node.set(object.toString(), id, "JSON"); 
             
-            //System.out.println("put new data");
-        	
             connectionManager.getConnection().commit();
         }
         catch (Exception ex) 

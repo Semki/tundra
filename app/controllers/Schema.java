@@ -24,19 +24,23 @@ public class Schema extends BaseController {
 			e.printStackTrace();
 			Utils.writeToFile("", e.toString());
 		}
-
-		
-		// generate JavaScript
-		JSGenerator generator = new JSGenerator();
+	
+		// generate JavaScripts
 		String url = "";
+	
 		try {
+					
+			String serverUrl = getServerUrl();
 			
-			String fileName = generator.Generate(body, projectId.toString());
-			InetAddress addr = InetAddress.getLocalHost();
-			String port = request.port.toString();					
-			String hostname = addr.getHostName();	
-			url = hostname+":"+port+fileName;
-			System.out.println(url);
+			JSGenerator generator = new JSGenerator(body, projectId.toString(),serverUrl);
+			
+			
+			String modelFileName = generator.GenerateModelJs();	
+			url = serverUrl + modelFileName;
+			
+			String viewFileName = generator.GenerateViewJs();
+			String htmlFileName = generator.GenerateHtml();
+			
 			
 		} catch (Exception e) {
 			System.out.println(e.toString());
@@ -49,9 +53,10 @@ public class Schema extends BaseController {
 	public static void read(long project_id){
 		SchemaManager mr = SchemaManager.Instance();
 		JsonObject body = mr.ReadSchema(project_id);
-		body.addProperty("models_url", "http://oboobs.ru/");
-		body.addProperty("views_url", "http://demotivation.me/");
-		body.addProperty("html_url", "http://putin2012.ru/");
+		String serverUrl = getServerUrl();
+		body.addProperty("models_url", "http://"+serverUrl+"/public/js/models/models" + project_id + ".js");
+		body.addProperty("views_url", "http://"+serverUrl+"/public/js/views/view" + project_id + ".js");;
+		body.addProperty("html_url", "http://"+serverUrl+"/public/htmls/html" + project_id + ".html");
 		renderJSON(body.toString());	
 	}
 	
@@ -60,4 +65,17 @@ public class Schema extends BaseController {
 		render(project_id);
 	}
 	
+	private static String getServerUrl() {
+		String result = "";
+		try {
+			InetAddress addr = InetAddress.getLocalHost();
+			String port = request.port.toString();
+			String hostname = addr.getHostAddress();
+			result = hostname + ":" + port;
+		}
+		catch (Exception e) {
+			System.out.println(e.toString());
+		}
+		return result;
+	}
 }

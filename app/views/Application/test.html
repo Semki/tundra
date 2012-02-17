@@ -32,21 +32,20 @@
 						<textarea id='post_content' ></textarea>
 					</div>
 					<div width="col_7" align='right' style='padding:0'>
-				
-							<input type="button" id="create_post_btn" value="Create Post" class="green"/>
-							<input type="button" id="refresh_posts_btn" value="Refresh Posts" class="green"/>
+						<input type="button" id="create_post_btn" value="Create Post" class="green"/>
+						<input type="button" id="refresh_posts_btn" value="Refresh Posts" class="green"/>
 					</div>
 					<div style='padding:0'>
-					
-							<input type="text" id="search_text" placeholder="Search" class = "col_5" />
-							<input type="button" id="search_btn" value="Search" class = "blue"/>
-					
-					
+						<input type="text" id="search_text" placeholder="Search" class = "col_5" />
+						<input type="button" id="search_btn" value="Search" class = "blue"/>
 						<ul id="posts">
 						</ul>
 					</div >
 				</div >
-				<script>
+			</div>
+		</div>
+    </body>
+	<script>
  
       $(document).ready(function(){
         
@@ -58,14 +57,11 @@
         Post.method('toHtml', function(){ 
 		 
           result = "<li class='post' post_id='"+this.Id+"'>"
-		  result = "<div class='clearfix col_5'>"
           result = result + "<h3>"+this.title+"</h3>"
-          result = result + "<textarea class='post_content' class='col_3'>"+ this.content+ "</textarea>"
+          result = result + "<textarea class='post_content' class='col_3' id = 'post"+this.Id+"'>"+ this.content+ "</textarea>"
 		  result = result + "<div align='right' class='folat:left'>"
           result = result + "<input type='button' class='post_edit blue' post_id='"+this.Id+"' value='Edit'>"
 		  result = result + "<input type='button' class='post_delete blue' class='.red' post_id='"+this.Id+"' value='Delete'>"
-          //result = result + "<input type='button' class='create_comment_btn' post_id='"+this.Id+"' value='Comment It'>"
-		  result = result + "</div>"
 		  result = result + "</div>"
 		  result = result + "</li>"
           return result;
@@ -88,11 +84,11 @@
         };
         
         $('#create_post_btn').click(function(){        
-          post = new Post();
+		  post = new Post();
           post.title = $('#post_title').val();
           post.content = $('#post_content').val();
           post.save(function(){
-            RefreshPosts();
+           RefreshPosts();
           })
         });
         
@@ -109,12 +105,9 @@
         });
         
         $(document).delegate(".post_edit", "click", function(){
-          /*
           var postId = $(this).attr("post_id");
-          alert(postId);
-          post = Post.open(postId);
-          */
-          
+          alert( $('#post'+postId+'').val());
+          post = Post.open(postId);   
         });
         
         $('#search_btn').click(function(){
@@ -130,8 +123,5 @@
         RefreshPosts();
         
       });
-				</script>
-			</div>
-		</div>
-    </body>
+	</script>
 </html>

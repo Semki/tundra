@@ -57,7 +57,7 @@ public class CRUD extends BaseController{
 				notFound();
 			}
 			else{
-				renderJSON(result);
+				renderJSON(result.toString());
 			}
 		}catch (Exception ex){
 			internalError();
@@ -90,13 +90,14 @@ public class CRUD extends BaseController{
 		}
 	}
 	
-	public static void update(Long projectId, String tableName, JsonObject object)
+	public static void update(Long projectId, String tableName, JsonObject body)
 	{	
 		try{
 			CRUDManager manager = CRUDManager.Instance();
-			manager.Update(projectId, tableName, object);
+			manager.Update(projectId, tableName, body);
 			ok();
 		}catch(Exception ex){
+			ex.printStackTrace();
 			internalError();
 		}
 	}

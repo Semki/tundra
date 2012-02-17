@@ -1,6 +1,7 @@
 package globalswrapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -36,6 +37,17 @@ public class ListWorker {
 		
 		//FilterApplicator applicator = new FilterApplicator(ProjectId, TableName, condition);
 		//FilterExpression expression = new FilterExpression(conditions, projectId)
+		
+		// фильтрация через индексы
+		// считаем что фильтр у нас только И, или сложнее. 
+		// 1. определяем порядок выполнения - extent\selectivity
+		// 2. функция выборки нужных значений из индекса
+		// 3. кладем в хэш выборки
+		// 4. итерационно пробегаемся по остальным индексам - и создаем новый хэш, добавляем туда значения присутствующие в индексе и в хэше 1
+		// 5. далее хэш 2 делаем основным хэшем - по сути интерсектим результат.
+		// 6. так для всех индексированных полей??
+		// 7. применяем фильтрацию на записи
+		
 		while (true)
 		{
 			String strKey = node.nextSubscript(key);
@@ -62,6 +74,17 @@ public class ListWorker {
 		
 		return list;
 		
+	}
+	
+	private HashMap<Long, JsonObject> filteredItems;
+	 
+	
+	// sort filter for efficency
+	private void OrderFilterExpression(FilterExpression expression)
+	{
+		ArrayList<Long> ids = new ArrayList<Long>();
+		
+		///ArrayList<FilterExpression> expressions = new ArrayList<>()
 	}
 	
 	public ArrayList<JsonObject> SortItems(ArrayList<JsonObject> items, SortCondition condition)

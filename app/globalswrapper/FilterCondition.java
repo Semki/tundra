@@ -126,7 +126,7 @@ public class FilterCondition {
 	
 	private Boolean StringContains(String nodeValue)
 	{
-		return nodeValue.contains(FilterValue.toString()); 
+		return nodeValue.toUpperCase().contains(FilterValue.toString().toUpperCase()); 
 	}
 	
 	

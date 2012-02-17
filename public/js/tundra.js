@@ -8,15 +8,28 @@ TActiveRecord = function(fields) {
 }
     
 TActiveRecord.prototype.save = function(successCallback) {
-    if (this.id == null) // let's create object
+    if (this.Id == null) // let's create object
     {
-        var url = "objects/" + tundraProjectId + "/" + this.constructor.tableName;
+        var url = tundraServerUrl + "objects/" + tundraProjectId + "/" + this.constructor.tableName;
         $.post(url, JSON.stringify(this), successCallback, "json");
+    }
+    else // let's update object
+    {
+      var url = tundraServerUrl + "objects/" + tundraProjectId + "/" + this.constructor.tableName + "/" + this.Id;
+      $.ajax({
+        type: "PUT",
+        url: url,
+        data: JSON.stringify(this),
+        success: function(){
+          successCallback.call(document);
+        },
+        dataType: "json"
+      });
     }
 }
 
 TActiveRecord.getAll = function(modelClass, successCallback) {
-    var url = "objects/" + tundraProjectId + "/" + modelClass.tableName;
+    var url = tundraServerUrl + "objects/" + tundraProjectId + "/" + modelClass.tableName;
     $.get(url, {}, function(data) {
       objects = [];
       for (var i=0; i< data.length; i++)
@@ -30,7 +43,7 @@ TActiveRecord.getAll = function(modelClass, successCallback) {
 }
 
 TActiveRecord.deleteId = function(modelClass, id, successCallback) {
-    var url = "objects/" + tundraProjectId + "/" + modelClass.tableName + "/" + id;
+    var url = tundraServerUrl + "objects/" + tundraProjectId + "/" + modelClass.tableName + "/" + id;
     $.ajax({
       type: "DELETE",
       url: url,
@@ -44,22 +57,16 @@ TActiveRecord.deleteId = function(modelClass, id, successCallback) {
 TActiveRecord.method = function(modelClass, methodName, methodBody) {
     modelClass.prototype[methodName] = methodBody;
 }
- 
-TActiveRecord.prototype.destroy = function() {
-    
-}
 
 
-TActiveRecord.open = function(modelClass, id) {
-    var url = "objects/" + tundraProjectId + "/" + modelClass + "/" + id;
+TActiveRecord.open = function(modelClass, id, successCallback) {
+    var url = tundraServerUrl + "objects/" + tundraProjectId + "/" + modelClass.tableName + "/" + id;
 
     $.get(url,{}, function(data) {
-	        
+        var inst = new modelClass(data);
+	      successCallback.call(document, inst);
 	    }, "json");
 
-    var inst = new modelClass();
-    inst.id = id;
-    return inst;
 }
 
 TActiveRecord.where = function(modelClass, field, predicate, value) {
@@ -92,7 +99,7 @@ TQueryObject.prototype.order = function(field, order) {
 };
 
 TQueryObject.prototype.getObjects = function(successCallback) {
-    var url = "objects/" + tundraProjectId + "/" +this.modelClass.tableName;
+    var url = tundraServerUrl + "objects/" + tundraProjectId + "/" +this.modelClass.tableName;
     var modelClass = this.modelClass;
     $.get(url, {jsonParam:JSON.stringify(this.toTransport())}, function(data) {
       objects = [];

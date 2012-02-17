@@ -82,7 +82,7 @@ public class IndexManager {
 			//System.out.println("trying to kill fieldName"+fieldName);
 			fieldValue = record.get(fieldName).getAsString();
 			//System.out.println("fieldValue "+fieldValue);
-			fieldValue = ConvertToIndex(fieldValue);
+			
 			if (insertMode)
 			{
 				//System.out.println("SetIndexValue "+fieldValue);
@@ -132,7 +132,7 @@ public class IndexManager {
 		{
 			fieldName = IndexedColumnNames.get(i);
 			oldFieldValue = oldRecord.get(fieldName).getAsString();
-			newFieldValue = oldRecord.get(fieldName).getAsString();
+			newFieldValue = newRecord.get(fieldName).getAsString();
 			
 			if (oldFieldValue.equalsIgnoreCase(newFieldValue))
 			{
@@ -160,15 +160,13 @@ public class IndexManager {
 		return SchemaManager.GetGlobalIndexByTableNameAndProjectId(this.TableName, this.ProjectId);
 	}
 	
-	public void SetIndexValue(NodeReference indexNode, Long objectId, String indexFieldName, String value)
+	public void SetIndexValue(NodeReference indexNode, Long objectId, String indexFieldName, String fieldValue)
 	{
-		indexNode.set(objectId, indexFieldName, value);
+		indexNode.set("", indexFieldName, ConvertToIndex(fieldValue), objectId);
 	}
 	
 	public void KillIndexValue(NodeReference indexNode, Long objectId, String indexFieldName, String fieldValue)
 	{
-		indexNode.setSubscriptCount(0);
-		indexNode.appendSubscript(indexFieldName);
 		indexNode.kill(indexFieldName, ConvertToIndex(fieldValue), objectId);
 	}
 	
